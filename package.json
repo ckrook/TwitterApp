@@ -1,0 +1,19 @@
+{
+  "name": "twitter-clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckrook/twitter-clone.git"
+  },
+  "author": "Charles Krook, Simon Sandahl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ckrook/twitter-clone/issues"
+  },
+  "homepage": "https://github.com/ckrook/twitter-clone#readme"
+}
