@@ -23,7 +23,8 @@
     "express": "^4.17.3",
     "express-handlebars": "^6.0.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.2.3"
+    "mongoose": "^6.2.3",
+    "passport-google-oauth": "^2.0.0"
   },
   "devDependencies": {
     "tailwindcss": "^3.0.23"
