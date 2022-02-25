@@ -27,10 +27,40 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+/////////////////
+// MIDDLEWARES //
+////////////////
+app.use((req, res, next) => {
+  const { token } = req.cookies;
+  if (token && jwt.verify(token, process.env.JWTSECRET)) {
+    // Logged in
+    const tokenData = jwt.decode(token, process.env.JWTSECRET);
+    res.locals.loggedIn = true;
+    res.locals.userId = tokenData.userId;
+    res.locals.username = tokenData.username;
+  } else {
+    // Not Logged in
+    res.locals.loggedin = false;
+  }
+  next();
+});
+
+const forceAuthorize = (req, res, next) => {
+  const { token } = req.cookies;
+  if (token && jwt.verify(token, process.env.JWTSECRET)) {
+    next();
+  } else {
+    res.sendStatus(401);
+  }
+};
+/////////////////////
+// MIDDLEWARES ENDS//
+////////////////////
+
 // SIGN IN //
 app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  UsersModel.findOne({ username }, (err, user) => {
+  const { email, password } = req.body;
+  UsersModel.findOne({ email }, (err, user) => {
     if (user && utils.comparePassword(password, user.hashedPassword)) {
       // Login successful
       const userData = { userId: user._id, username };
@@ -58,30 +88,32 @@ app.get("/seed-data", async (req, res) => {
     email: "Charles.Krook@gmail.com",
     city: "Stockholm",
     dateOfBirth: 19900101,
-    role: "Admin"
-  })
+    role: "Admin",
+  });
   const adminUserAlexia = new UsersModel({
     username: "AlexiaHellsten",
     hashedPassword: "admin",
     email: "Alexia.Hellsten@gmail.com",
     city: "Stockholm",
     dateOfBirth: 19900101,
-    role: "Admin"
-  })
+    role: "Admin",
+  });
   const adminUserSimon = new UsersModel({
     username: "SimonSandahl",
     hashedPassword: "admin",
     email: "Simon.Sandahl@gmail.com",
     city: "Stockholm",
     dateOfBirth: 19900101,
-    role: "Admin"
-  })
+    role: "Admin",
+  });
 
   await adminUserCharles.save();
   await adminUserAlexia.save();
   await adminUserSimon.save();
 
-  res.send("Boom admins are created! Gå bara hit en gång dock annars blir de nog knas. Kolla i mongodb compass så användarna finns där");
+  res.send(
+    "Boom admins are created! Gå bara hit en gång dock annars blir de nog knas. Kolla i mongodb compass så användarna finns där"
+  );
 });
 
 app.listen(8000, () => {
