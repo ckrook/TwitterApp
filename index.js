@@ -8,6 +8,9 @@ const cookieParser = require("cookie-parser");
 
 const UsersModel = require("./models/UsersModel.js");
 const utils = require("./utils.js");
+const userRoutes = require("./routes/UserRoutes.js");
+const postRoutes = require("./routes/PostRoutes.js");
+const commentRoutes = require("./routes/CommentRoutes.js");
 
 const app = express();
 
@@ -22,17 +25,12 @@ app.engine(
 app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use("/user", userRoutes);
+app.use("/post", postRoutes);
+app.use("/comment", commentRoutes);
 
 app.get("/", (req, res) => {
   res.render("home");
-});
-
-app.get("/sign-up", (req, res) => {
-  res.render("signup");
-});
-
-app.get("/sign-up-extra", (req, res) => {
-  res.render("signup-step-2");
 });
 
 app.listen(8000, () => {
