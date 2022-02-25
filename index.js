@@ -16,6 +16,12 @@ app.engine(
   exphbs.engine({
     extname: ".hbs",
     defaultLayout: "main",
+    helpers: {
+      formatDate: (time) => {
+        const date = new Date(time);
+        return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+      }
+    }
   })
 );
 
