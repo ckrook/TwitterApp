@@ -27,6 +27,22 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+// SIGN IN //
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  UsersModel.findOne({ username }, (err, user) => {
+    if (user && utils.comparePassword(password, user.hashedPassword)) {
+      // Login successful
+      const userData = { userId: user._id, username };
+      const accesToken = jwt.sign(userData, process.env.JWTSECRET);
+      res.cookie("token", accesToken);
+      res.redirect("/");
+    } else {
+      res.send("Login failed");
+    }
+  });
+});
+
 app.get("/sign-up", (req, res) => {
   res.render("signup");
 });
