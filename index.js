@@ -82,9 +82,11 @@ app.get("/sign-up-extra", (req, res) => {
 });
 
 app.get("/seed-data", async (req, res) => {
+  const password = "admin";
+
   const adminUserCharles = new UsersModel({
     username: "CharlesKrook",
-    hashedPassword: "admin",
+    hashedPassword: utils.hashedPassword(password),
     email: "Charles.Krook@gmail.com",
     city: "Stockholm",
     dateOfBirth: 19900101,
@@ -92,7 +94,7 @@ app.get("/seed-data", async (req, res) => {
   });
   const adminUserAlexia = new UsersModel({
     username: "AlexiaHellsten",
-    hashedPassword: "admin",
+    hashedPassword: utils.hashedPassword(password),
     email: "Alexia.Hellsten@gmail.com",
     city: "Stockholm",
     dateOfBirth: 19900101,
@@ -100,7 +102,7 @@ app.get("/seed-data", async (req, res) => {
   });
   const adminUserSimon = new UsersModel({
     username: "SimonSandahl",
-    hashedPassword: "admin",
+    hashedPassword: utils.hashedPassword(password),
     email: "Simon.Sandahl@gmail.com",
     city: "Stockholm",
     dateOfBirth: 19900101,
