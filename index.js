@@ -35,6 +35,39 @@ app.get("/sign-up-extra", (req, res) => {
   res.render("signup-step-2");
 });
 
+app.get("/seed-data", async (req, res) => {
+  const adminUserCharles = new UsersModel({
+    username: "CharlesKrook",
+    hashedPassword: "admin",
+    email: "Charles.Krook@gmail.com",
+    city: "Stockholm",
+    dateOfBirth: 19900101,
+    role: "Admin"
+  })
+  const adminUserAlexia = new UsersModel({
+    username: "AlexiaHellsten",
+    hashedPassword: "admin",
+    email: "Alexia.Hellsten@gmail.com",
+    city: "Stockholm",
+    dateOfBirth: 19900101,
+    role: "Admin"
+  })
+  const adminUserSimon = new UsersModel({
+    username: "SimonSandahl",
+    hashedPassword: "admin",
+    email: "Simon.Sandahl@gmail.com",
+    city: "Stockholm",
+    dateOfBirth: 19900101,
+    role: "Admin"
+  })
+
+  await adminUserCharles.save();
+  await adminUserAlexia.save();
+  await adminUserSimon.save();
+
+  res.send("Boom admins are created! Gå bara hit en gång dock annars blir de nog knas. Kolla i mongodb compass så användarna finns där");
+});
+
 app.listen(8000, () => {
   console.log("http://localhost:8000/");
 });
