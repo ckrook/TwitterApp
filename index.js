@@ -27,6 +27,10 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+app.get("/sign-up", (req, res) => {
+  res.render("signup");
+});
+
 app.listen(8000, () => {
   console.log("http://localhost:8000/");
 });
