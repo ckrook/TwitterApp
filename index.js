@@ -31,6 +31,10 @@ app.get("/sign-up", (req, res) => {
   res.render("signup");
 });
 
+app.get("/sign-up-extra", (req, res) => {
+  res.render("signup-step-2");
+});
+
 app.listen(8000, () => {
   console.log("http://localhost:8000/");
 });
