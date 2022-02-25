@@ -23,10 +23,6 @@ app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.render("home");
-});
-
 /////////////////
 // MIDDLEWARES //
 ////////////////
@@ -57,10 +53,14 @@ const forceAuthorize = (req, res, next) => {
 // MIDDLEWARES ENDS//
 ////////////////////
 
-// SIGN IN //
+app.get("/", (req, res) => {
+  res.render("home");
+});
+
+// Login //
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  UsersModel.findOne({ email }, (err, user) => {
+  const { username, password } = req.body;
+  UsersModel.findOne({ username }, (err, user) => {
     if (user && utils.comparePassword(password, user.hashedPassword)) {
       // Login successful
       const userData = { userId: user._id, username };
@@ -79,6 +79,10 @@ app.get("/sign-up", (req, res) => {
 
 app.get("/sign-up-extra", (req, res) => {
   res.render("signup-step-2");
+});
+
+app.get("/secret2", forceAuthorize, (req, res) => {
+  res.send("This is a secret page");
 });
 
 app.get("/seed-data", async (req, res) => {
@@ -116,6 +120,11 @@ app.get("/seed-data", async (req, res) => {
   res.send(
     "Boom admins are created! Gå bara hit en gång dock annars blir de nog knas. Kolla i mongodb compass så användarna finns där"
   );
+});
+
+app.post("/log-out", (req, res) => {
+  res.cookie("token", "", { maxAge: 0 });
+  res.redirect("/");
 });
 
 app.listen(8000, () => {

@@ -8,7 +8,14 @@
     <title>Twitter Clone</title>
   </head>
   <body>
+  {{#if loggedIn}}
+    {{>header}}
     {{{body}}}
     {{>footer}}
+  {{else}}
+      {{{body}}}
+      {{>footer}}
+  {{/if}}
+
   </body>
 </html>
