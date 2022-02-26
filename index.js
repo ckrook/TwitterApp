@@ -86,6 +86,39 @@ app.post("/login", async (req, res) => {
 });
 
 
+//Sign up
+app.post("/sign-up", async (req, res) => {
+  res.render("signup");
+  const { username, password, confirmPassword } = req.body
+
+  UsersModel.findOne({ username }, async (err, user)  => {
+    if (user) {
+      res.send("Username is already taken")
+
+    } else if (password !== confirmPassword) {
+      res.send("Incorrect password, try again")
+
+    } else if (email == user.email) {
+      res.send("Email already in use")
+
+    } else {
+
+      const newUser = new UsersModel({
+        username, 
+        hashedPassword: utils.hashedPassword(password)
+        //add more things here later
+      })
+      await newUser.save()
+  
+      res.sendStatus(200)
+
+      res.redirect("/login")
+    }
+  })
+});
+
+
+//
 app.get("/sign-up", (req, res) => {
   res.render("signup");
 });
