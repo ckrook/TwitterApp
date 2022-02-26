@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //LOG IN
-router.get("/log-in", (req, res) => {
+router.get("/", (req, res) => {
     res.render("signup");
   });
   
@@ -29,15 +29,15 @@ router.get("/sign-up-extra", (req, res) => {
   });
 
 //USER PROFILE
-router.get("/user-profile", (req, res) => {
+router.get("/view", (req, res) => {
     res.render("user-profile");
   });
 
- router.put("/edit-profile", (req, res) => {
+ router.put("/edit", (req, res) => {
     res.render("edit-profile");
 });
     
-router.delete("/delete-profile", (req, res) => {
+router.delete("/delete", (req, res) => {
     res.render("delete-profile");
 });
 

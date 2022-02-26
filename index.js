@@ -140,7 +140,6 @@ app.post("/log-out", (req, res) => {
   res.redirect("/");
 });
 
->>>>>>> 13d7187b50d1eccbb9c8d849168f659a5c60c23e
 app.listen(8000, () => {
   console.log("http://localhost:8000/");
 });

@@ -1,23 +1,23 @@
 const express = require('express');
 const router = express.Router();
 
-router.get("/comments", (req, res) => {
+router.get("/", (req, res) => {
     res.render("start");
   });
 
-router.get("/single-comment", (req, res) => {
+router.get("/single", (req, res) => {
     res.redirect("single-comment");
   });
 
-router.post("/new-comment", (req, res) => {
+router.post("/new", (req, res) => {
     res.redirect("new-comment");
   });
 
-router.put("/edit-comment", (req, res) => {
+router.put("/edit", (req, res) => {
     res.redirect("edit-comment");
   });
 
-router.delete("/delete-comment", (req, res) => {
+router.delete("/delete", (req, res) => {
     res.redirect("delete-comment");
   });
 
