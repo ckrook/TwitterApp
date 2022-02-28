@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const PostsModel = require("../models/PostsModel.js");
+const utils = require("../utils.js");
+
 router.get("/", (req, res) => {
     res.render("start");
   });

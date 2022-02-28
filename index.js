@@ -11,6 +11,7 @@ const utils = require("./utils.js");
 const userRoutes = require("./routes/UserRoutes.js");
 const postRoutes = require("./routes/PostRoutes.js");
 const commentRoutes = require("./routes/CommentRoutes.js");
+const seedDataRoutes = require("./routes/SeedDataRoutes.js");
 
 const app = express();
 
@@ -125,42 +126,17 @@ app.get("/secret2", forceAuthorize, (req, res) => {
   res.send("This is a secret page");
 });
 
-app.get("/seed-data", async (req, res) => {
-  const password = "admin";
+///////////
+// POSTS //
+///////////
 
-  const adminUserCharles = new UsersModel({
-    username: "CharlesKrook",
-    hashed_password: utils.hashedPassword(password),
-    email: "Charles.Krook@gmail.com",
-    city: "Stockholm",
-    date_of_birth: 19900101,
-    role: "Admin",
-  });
-  const adminUserAlexia = new UsersModel({
-    username: "AlexiaHellsten",
-    hashed_password: utils.hashedPassword(password),
-    email: "Alexia.Hellsten@gmail.com",
-    city: "Stockholm",
-    date_of_birth: 19900101,
-    role: "Admin",
-  });
-  const adminUserSimon = new UsersModel({
-    username: "SimonSandahl",
-    hashed_password: utils.hashedPassword(password),
-    email: "Simon.Sandahl@gmail.com",
-    city: "Stockholm",
-    date_of_birth: 19900101,
-    role: "Admin",
-  });
+app.use("/post", postRoutes);
 
-  await adminUserCharles.save();
-  await adminUserAlexia.save();
-  await adminUserSimon.save();
+//////////////////
+// END OF POSTS //
+//////////////////
 
-  res.send(
-    "Boom admins are created! Gå bara hit en gång dock annars blir de nog knas. Kolla i mongodb compass så användarna finns där"
-  );
-});
+app.use("/seed-data", seedDataRoutes);
 
 app.post("/log-out", (req, res) => {
   res.cookie("token", "", { maxAge: 0 });
