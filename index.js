@@ -23,8 +23,8 @@ app.engine(
       formatDate: (time) => {
         const date = new Date(time);
         return date.toLocaleDateString() + " " + date.toLocaleTimeString();
-      }
-    }
+      },
+    },
   })
 );
 
@@ -85,7 +85,6 @@ app.post("/login", async (req, res) => {
   });
 });
 
-
 app.get("/sign-up", (req, res) => {
   res.render("signup");
 });
@@ -140,7 +139,6 @@ app.post("/log-out", (req, res) => {
   res.redirect("/");
 });
 
->>>>>>> 13d7187b50d1eccbb9c8d849168f659a5c60c23e
 app.listen(8000, () => {
   console.log("http://localhost:8000/");
 });

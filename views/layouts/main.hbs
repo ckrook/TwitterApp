@@ -3,19 +3,22 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/style.css" />
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
+    
     <title>Twitter Clone</title>
   </head>
   <body>
-  {{#if loggedIn}}
-    {{>header}}
-    {{{body}}}
-    {{>footer}}
-  {{else}}
-      {{{body}}}
-      {{>footer}}
-  {{/if}}
-
+    <main class="flex h-screen overflow-auto w-full m-auto">
+      {{#if loggedIn}}
+        {{>aside}}
+        {{{body}}}
+        {{>footer}}
+      {{else}}
+        {{{body}}}
+        {{>footer}}
+      {{/if}}
+    </main>
   </body>
 </html>
