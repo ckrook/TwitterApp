@@ -12,15 +12,46 @@
     >
       <p class="text-lg font-medium">Add some extra details to your profile</p>
 
+ {{!-- -------------------------- EXTRA FORM BEGINS HERE --------------------------- --}}
+        <div>
+        <label for="bio" class="text-sm font-medium">Date of birth</label>
+          <input class="w-full p-3 text-sm border-gray-200 rounded-lg" placeholder="Select birthdate" type="date" id="birthdate" />
+            <p class="text-sm text-left text-gray-500">This will not be shown publicly.</p>
+        </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+            <label for="country" class="text-sm font-medium">Country</label>
+              <input
+                class="w-full p-3 text-sm border-gray-200 rounded-lg"
+                placeholder="Country"
+                type="text"
+                id="country"
+              />
+            </div>
+
+            <div>
+              <label for="phone-number" class="text-sm font-medium">Phone number</label>
+              <input
+                class="w-full p-3 text-sm border-gray-200 rounded-lg"
+                placeholder="+000 000 00 00"
+                type="tel"
+                id="phone"
+              />
+            </div>
+          </div>
+  
+
+ {{!-- -------------------------- EXTRA FORM ENDS HERE --------------------------- --}}
       <div>
-        <label for="email" class="text-sm font-medium">Bio</label>
+        <label for="bio" class="text-sm font-medium">Bio</label>
 
         <div class="relative mt-1">
           <textarea
-            type="email"
-            id="email"
+            type="text"
+            id="bio"
             class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Enter username"
+            placeholder="Write something about yourself"
           /></textarea>
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
@@ -29,15 +60,16 @@
         </div>
       </div>
       <div>
-        <label for="email" class="text-sm font-medium">Profile picture</label>
 
-        <div class="relative mt-1">
-          <input
-            type="email"
-            id="email"
+        <label for="profile-picture" class="text-sm font-medium">Profile picture</label>
+        
+        <form method="post" enctype="multipart/form-data" action="/upload">
+          <input type="file" name="file" id="profile-picture"
             class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Enter email"
+            placeholder="Upload profile picture"
           />
+          <input type="submit" value="Submit">
+      </form>
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
             <svg
@@ -57,8 +89,6 @@
           </span>
         </div>
       </div>
-
-
 
       <button
         type="submit"
