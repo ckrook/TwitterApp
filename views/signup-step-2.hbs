@@ -7,25 +7,25 @@
     </p>
     <div class="p-8 mt-6 mb-0 rounded-lg shadow-2xl">
     <form
-      action="/login"
-      class="space-y-4"
+      action="/sign-up-extra"
+      class="space-y-4" method="POST"
     >
       <p class="text-lg font-medium">Add some extra details to your profile</p>
 
         <div>
-        <label for="bio" class="text-sm font-medium">Date of birth</label>
-          <input class="w-full p-3 text-sm border-gray-200 rounded-lg" placeholder="Select birthdate" type="date" id="birthdate" />
+        <label for="dateOfBirth" class="text-sm font-medium">Date of birth</label>
+          <input class="w-full p-3 text-sm border-gray-200 rounded-lg" placeholder="Select birthdate" type="date" id="dateOfBirth" name="dateOfBirth" />
             <p class="text-sm text-left text-gray-500 py-5">This will not be shown publicly.</p>
         </div>
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-            <label for="country" class="text-sm font-medium">Country</label>
+            <label for="city" class="text-sm font-medium">City</label>
               <input
                 class="w-full p-3 text-sm border-gray-200 rounded-lg"
-                placeholder="Country"
+                placeholder="City"
                 type="text"
-                id="country"
+                id="city" name="city"
               />
             </div>
 
@@ -35,7 +35,7 @@
                 class="w-full p-3 text-sm border-gray-200 rounded-lg"
                 placeholder="+000 000 00 00"
                 type="tel"
-                id="phone"
+                id="phone" name="phone-number"
               />
             </div>
           </div>
@@ -46,7 +46,7 @@
         <div class="relative mt-1">
           <textarea
             type="text"
-            id="bio"
+            id="bio" name="bio"
             class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
             placeholder="Write something about yourself"
           /></textarea>
@@ -60,8 +60,8 @@
 
         <label for="profile-picture" class="text-sm font-medium">Profile picture</label>
         
-        <form method="post" enctype="multipart/form-data" action="/upload">
-          <input type="file" name="file" id="profile-picture"
+        <form method="POST" enctype="multipart/form-data" action="/upload">
+          <input type="file" name="file" id="profile-picture" name="profile-picture"
             class="w-full p-4 pr-12 my-5 text-sm border-gray-200 rounded-lg shadow-sm"
             placeholder="Choose file"
           />
@@ -96,7 +96,7 @@
 
     <p class="text-sm text-center text-gray-500">
     </form>
-      <form action="/" method="get">
+      <form action="/home" method="GET">
         <button class="underline my-5" href="/">Lets do this later..</button>
       </form>
     </div>

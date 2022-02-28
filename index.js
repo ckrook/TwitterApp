@@ -89,31 +89,40 @@ app.post("/login", async (req, res) => {
 //Sign up
 app.post("/sign-up", async (req, res) => {
   res.render("signup");
-  const { username, password, confirmPassword } = req.body;
+  const { username, password, confirmPassword, email} = req.body;
 
   UsersModel.findOne({ username }, async (err, user) => {
     if (user) {
-      res.send("Username is already taken");
-    } else if (password !== confirmPassword) {
-      res.send("Incorrect password, try again");
-    } else if (email == user.email) {
-      res.send("Email already in use");
-    } else {
+      return res.status(400).send('Username is already taken');
+    } 
+    if (email == user.email) {
+      return res.status(400).send("Email already in use");
+    } 
+    else if (password !== confirmPassword) {
+      return res.status(400).send("Passwords don't match");
+    } 
+    else {
+
       const newUser = new UsersModel({
-        username,
+        username: req.body.username,
         hashedPassword: utils.hashedPassword(password),
-        //add more things here later
+        email: req.body.email,
+        city: req.body.city,
+        dateOfBirth: req.body.dateOfBirth,
+        created: Date.now(),
+        role: "User",
+        bio: req.body.bio,
+        profilePicture: req.body.profilePicture,
+        posts: req.body.posts,
+        likedPosts: req.body.likedPosts
       });
+
       await newUser.save();
-
-      res.sendStatus(200);
-
-      res.redirect("/login");
+      res.redirect("/");
     }
   });
 });
 
-//
 app.get("/sign-up", (req, res) => {
   res.render("signup");
 });
