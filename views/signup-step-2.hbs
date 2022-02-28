@@ -12,11 +12,10 @@
     >
       <p class="text-lg font-medium">Add some extra details to your profile</p>
 
- {{!-- -------------------------- EXTRA FORM BEGINS HERE --------------------------- --}}
         <div>
         <label for="bio" class="text-sm font-medium">Date of birth</label>
           <input class="w-full p-3 text-sm border-gray-200 rounded-lg" placeholder="Select birthdate" type="date" id="birthdate" />
-            <p class="text-sm text-left text-gray-500">This will not be shown publicly.</p>
+            <p class="text-sm text-left text-gray-500 py-5">This will not be shown publicly.</p>
         </div>
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -41,8 +40,6 @@
             </div>
           </div>
   
-
- {{!-- -------------------------- EXTRA FORM ENDS HERE --------------------------- --}}
       <div>
         <label for="bio" class="text-sm font-medium">Bio</label>
 
@@ -65,10 +62,9 @@
         
         <form method="post" enctype="multipart/form-data" action="/upload">
           <input type="file" name="file" id="profile-picture"
-            class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Upload profile picture"
+            class="w-full p-4 pr-12 my-5 text-sm border-gray-200 rounded-lg shadow-sm"
+            placeholder="Choose file"
           />
-          <input type="submit" value="Submit">
       </form>
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
@@ -88,7 +84,7 @@
             </svg>
           </span>
         </div>
-      </div>
+        
 
       <button
         type="submit"
@@ -96,10 +92,12 @@
       >
         Complete profile
       </button>
+      </div>
+
     <p class="text-sm text-center text-gray-500">
     </form>
       <form action="/" method="get">
-        <button class="underline" href="/">Lets do this later..</button>
+        <button class="underline my-5" href="/">Lets do this later..</button>
       </form>
     </div>
     </p>

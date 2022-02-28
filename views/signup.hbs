@@ -20,7 +20,7 @@
             type="text"
             id="username"
             class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Enter username"
+            placeholder="Enter username" pattern="^[a-zA-Z0-9]{4,10}$" title="No special characters allowed" required
           />
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
@@ -49,7 +49,7 @@
             type="email"
             id="email"
             class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Enter email"
+            placeholder="Enter email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required
           />
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
@@ -79,7 +79,8 @@
             type="password"
             id="password"
             class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Enter password"
+            placeholder="Enter password" pattern=".{8,}"
+  title="Must contain at least 8 or more characters"
           />
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
@@ -114,7 +115,8 @@
             type="password"
             id="password"
             class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Enter password again"
+            placeholder="Enter password again" pattern=".{8,}"
+  title="Passwords must match"
           />
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
