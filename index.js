@@ -73,7 +73,7 @@ app.get("/", (req, res) => {
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   UsersModel.findOne({ username }, (err, user) => {
-    if (user && utils.comparePassword(password, user.hashedPassword)) {
+    if (user && utils.comparePassword(password, user.hashed_password)) {
       // Login successful
       const userData = { userId: user._id, username };
       const accesToken = jwt.sign(userData, process.env.JWTSECRET);
@@ -130,26 +130,26 @@ app.get("/seed-data", async (req, res) => {
 
   const adminUserCharles = new UsersModel({
     username: "CharlesKrook",
-    hashedPassword: utils.hashedPassword(password),
+    hashed_password: utils.hashedPassword(password),
     email: "Charles.Krook@gmail.com",
     city: "Stockholm",
-    dateOfBirth: 19900101,
+    date_of_birth: 19900101,
     role: "Admin",
   });
   const adminUserAlexia = new UsersModel({
     username: "AlexiaHellsten",
-    hashedPassword: utils.hashedPassword(password),
+    hashed_password: utils.hashedPassword(password),
     email: "Alexia.Hellsten@gmail.com",
     city: "Stockholm",
-    dateOfBirth: 19900101,
+    date_of_birth: 19900101,
     role: "Admin",
   });
   const adminUserSimon = new UsersModel({
     username: "SimonSandahl",
-    hashedPassword: utils.hashedPassword(password),
+    hashed_password: utils.hashedPassword(password),
     email: "Simon.Sandahl@gmail.com",
     city: "Stockholm",
-    dateOfBirth: 19900101,
+    date_of_birth: 19900101,
     role: "Admin",
   });
 
