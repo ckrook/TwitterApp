@@ -104,7 +104,9 @@
         </svg>
         <p class="hidden sm:block">Bookmarks</p>
       </button>
-      <button
+      <a
+        href="/user/{{userId}}"
+        method="get"
         class="flex items-center space-x-4 py-4 px-4 sm:px-8 rounded-full hover:bg-gray-200"
       >
         <svg
@@ -120,7 +122,7 @@
           ></path>
         </svg>
         <p class="hidden sm:block">Profile</p>
-      </button>
+      </a>
 
       <hr class="border-t-[0.1px] border-gray-300" />
 
@@ -138,8 +140,8 @@
             alt="Charles Krook"
           />
           <div class="flex flex-col justify-start w-full hidden sm:block">
-            <b>{{userIdname}}</b>
-            <p class="text-gray-400">@{{userIdname}}</p>
+            <b>Username</b>
+            <p class="text-gray-400">@Username</p>
           </div>
           <div class="flex justify-end">
             <label

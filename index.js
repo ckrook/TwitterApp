@@ -31,9 +31,6 @@ app.engine(
 app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use("/user", userRoutes);
-app.use("/post", postRoutes);
-app.use("/comment", commentRoutes);
 
 /////////////////
 // MIDDLEWARES //
@@ -64,6 +61,10 @@ const forceAuthorize = (req, res, next) => {
 /////////////////////
 // MIDDLEWARES ENDS//
 ////////////////////
+
+app.use("/user", userRoutes);
+app.use("/post", postRoutes);
+app.use("/comment", commentRoutes);
 
 app.get("/", (req, res) => {
   res.render("home");
