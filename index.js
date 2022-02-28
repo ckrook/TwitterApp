@@ -94,15 +94,18 @@ app.post("/sign-up", async (req, res) => {
   UsersModel.findOne({ username }, async (err, user) => {
     if (user) {
       return res.status(400).send('Username is already taken');
-    } 
+    }
+
+    UsersModel.findOne({ email }, async (err, user) => {
     if (email == user.email) {
       return res.status(400).send("Email already in use");
-    } 
-    else if (password !== confirmPassword) {
+    }
+    
+    UsersModel.findOne({ password }, async (err, user) => {
+    if (password !== confirmPassword) {
       return res.status(400).send("Passwords don't match");
-    } 
-    else {
-
+    }
+    
       const newUser = new UsersModel({
         username: req.body.username,
         hashedPassword: utils.hashedPassword(password),
@@ -119,8 +122,9 @@ app.post("/sign-up", async (req, res) => {
 
       await newUser.save();
       res.redirect("/");
-    }
+    });
   });
+});
 });
 
 app.get("/sign-up", (req, res) => {
