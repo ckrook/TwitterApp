@@ -10,8 +10,12 @@ const usersSchema = new mongoose.Schema({
   role: { type: String, default: "User" },
   bio: String,
   profilePicture: String,
-  posts: [],
-  likedPosts: []
+  posts: [{ 
+    type: String 
+  }],
+  likedPosts: [{ 
+    type: String 
+  }]
 });
 
 const Usersmodel = mongoose.model("Users", usersSchema);
