@@ -11,6 +11,8 @@ const utils = require("./utils.js");
 const userRoutes = require("./routes/UserRoutes.js");
 const postRoutes = require("./routes/PostRoutes.js");
 const commentRoutes = require("./routes/CommentRoutes.js");
+const seedDataRoutes = require("./routes/SeedDataRoutes.js");
+const PostsModel = require("./models/PostsModel.js");
 
 const app = express();
 
@@ -62,19 +64,26 @@ const forceAuthorize = (req, res, next) => {
 // MIDDLEWARES ENDS//
 ////////////////////
 
+app.get("/", async (req, res) => {
+  const posts = await PostsModel.find().lean();
+
+  res.render("home", { posts });
+});
+
+// ROUTES
+
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
+app.use("/seed-data", seedDataRoutes);
 
-app.get("/", (req, res) => {
-  res.render("home");
-});
+// END OF ROUTES
 
 // Login //
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   UsersModel.findOne({ username }, (err, user) => {
-    if (user && utils.comparePassword(password, user.hashedPassword)) {
+    if (user && utils.comparePassword(password, user.hashed_password)) {
       // Login successful
       const userData = { userId: user._id, username };
       const accesToken = jwt.sign(userData, process.env.JWTSECRET);
@@ -124,43 +133,6 @@ app.get("/sign-up-extra", (req, res) => {
 
 app.get("/secret2", forceAuthorize, (req, res) => {
   res.send("This is a secret page");
-});
-
-app.get("/seed-data", async (req, res) => {
-  const password = "admin";
-
-  const adminUserCharles = new UsersModel({
-    username: "CharlesKrook",
-    hashedPassword: utils.hashedPassword(password),
-    email: "Charles.Krook@gmail.com",
-    city: "Stockholm",
-    dateOfBirth: 19900101,
-    role: "Admin",
-  });
-  const adminUserAlexia = new UsersModel({
-    username: "AlexiaHellsten",
-    hashedPassword: utils.hashedPassword(password),
-    email: "Alexia.Hellsten@gmail.com",
-    city: "Stockholm",
-    dateOfBirth: 19900101,
-    role: "Admin",
-  });
-  const adminUserSimon = new UsersModel({
-    username: "SimonSandahl",
-    hashedPassword: utils.hashedPassword(password),
-    email: "Simon.Sandahl@gmail.com",
-    city: "Stockholm",
-    dateOfBirth: 19900101,
-    role: "Admin",
-  });
-
-  await adminUserCharles.save();
-  await adminUserAlexia.save();
-  await adminUserSimon.save();
-
-  res.send(
-    "Boom admins are created! Gå bara hit en gång dock annars blir de nog knas. Kolla i mongodb compass så användarna finns där"
-  );
 });
 
 app.post("/log-out", (req, res) => {

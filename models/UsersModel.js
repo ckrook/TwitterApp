@@ -2,18 +2,22 @@ const mongoose = require("mongoose");
 
 const usersSchema = new mongoose.Schema({
   username: { type: String, required: true },
-  hashedPassword: { type: String, required: true },
+  hashed_password: { type: String, required: true },
   email: { type: String, required: true },
   city: { type: String, required: true},
-  dateOfBirth: { type: Number, required: true },
+  date_of_birth: { type: Number, required: true },
   created: { type: Number, default: Date.now },
   role: { type: String, default: "User" },
   bio: String,
   profilePicture: String,
-  posts: [],
-  likedPosts: []
+  posts: [{ 
+    type: String 
+  }],
+  liked_posts: [{ 
+    type: String 
+  }]
 });
 
-const Usersmodel = mongoose.model("Users", usersSchema);
+const UsersModel = mongoose.model("Users", usersSchema);
 
-module.exports = Usersmodel;
+module.exports = UsersModel;
