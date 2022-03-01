@@ -34,7 +34,7 @@ app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-/////////////////
+//////////////////
 // MIDDLEWARES //
 ////////////////
 app.use((req, res, next) => {
@@ -44,7 +44,7 @@ app.use((req, res, next) => {
     const tokenData = jwt.decode(token, process.env.JWTSECRET);
     res.locals.loggedIn = true;
     res.locals.userId = tokenData.userId;
-    res.locals.username = tokenData.username;
+    res.locals.userIdname = tokenData.username;
   } else {
     // Not Logged in
     res.locals.loggedin = false;
@@ -60,14 +60,53 @@ const forceAuthorize = (req, res, next) => {
     res.sendStatus(401);
   }
 };
+
+const sortPosts = async (req, res, next) => {
+  let userId = res.locals.userIdname;
+  let mainUser = await UsersModel.findOne({ userId });
+  let following = mainUser.follows;
+
+  let posts = await PostsModel.find()
+    .sort([["created", "desc"]])
+    .lean();
+  for (let post of posts) {
+    post.created = utils.timeAgo(post.created);
+  }
+
+  console.log(posts);
+  req.sortPosts = posts;
+  next();
+};
+
+const followthem = async (req, res, next) => {
+  let userId = res.locals.userId;
+  let toFollow = await UsersModel.find().lean();
+  let mainUser = await UsersModel.findOne({ userId });
+  mainUser = mainUser.follows;
+  const findFollowers = await UsersModel.find({ _id: { $in: mainUser } });
+  toFollow = toFollow.filter((user) => {
+    return user.username !== res.locals.userIdname;
+  });
+  for (var i = 0; i < toFollow.length; i++) {
+    for (var j = 0; j < findFollowers.length; j++) {
+      if (JSON.stringify(toFollow[i]) == JSON.stringify(findFollowers[j])) {
+        toFollow.splice(i, 1);
+      }
+    }
+  }
+  req.followthem = toFollow;
+  next();
+};
+
 /////////////////////
 // MIDDLEWARES ENDS//
 ////////////////////
 
-app.get("/", async (req, res) => {
-  const posts = await PostsModel.find().lean();
+app.get("/", sortPosts, followthem, async (req, res) => {
+  let posts = req.sortPosts;
+  let followthem = req.followthem;
 
-  res.render("home", { posts });
+  res.render("home", { posts, followthem });
 });
 
 // ROUTES
