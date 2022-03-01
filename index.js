@@ -98,7 +98,7 @@ const followthem = async (req, res, next) => {
   next();
 };
 
-/////////////////////
+//////////////////////
 // MIDDLEWARES ENDS//
 ////////////////////
 

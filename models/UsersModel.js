@@ -5,11 +5,10 @@ const usersSchema = new mongoose.Schema({
   hashedPassword: { type: String, required: true },
   email: { type: String, required: true },
   city: { type: String },
-  description: { type: String, default: "" },
   dateOfBirth: { type: Number },
   created: { type: Number, default: Date.now },
   role: { type: String, default: "User" },
-  bio: String,
+  bio: { type: String, default: "" },
   profilePicture: String,
   posts: [
     {
@@ -23,6 +22,14 @@ const usersSchema = new mongoose.Schema({
       default: [],
     },
   ],
+  follows_count: { type: Number },
+  followers: [
+    {
+      type: String,
+      default: [],
+    },
+  ],
+  follower_count: { type: Number },
   likedPosts: [
     {
       type: String,
