@@ -10,7 +10,7 @@
   <div class="w-full">
     <form
       class="mb-0"
-      action="/post/new?author_id={{userId}}&author_username={{userIdname}}"
+      action="/post/new"
       method="post"
     >
       <textarea
@@ -22,6 +22,9 @@
         placeholder="Whats on your mind?"
       ></textarea>
       <div class="flex justify-end">
+      <div class="text-sm text-red-500 w-full">
+        {{error}}
+      </div>
         <input
           value="Send"
           type="submit"

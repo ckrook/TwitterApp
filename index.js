@@ -12,6 +12,7 @@ const userRoutes = require("./routes/UserRoutes.js");
 const postRoutes = require("./routes/PostRoutes.js");
 const commentRoutes = require("./routes/CommentRoutes.js");
 const seedDataRoutes = require("./routes/SeedDataRoutes.js");
+const PostsModel = require("./models/PostsModel.js");
 
 const app = express();
 
@@ -32,9 +33,6 @@ app.engine(
 app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use("/user", userRoutes);
-app.use("/post", postRoutes);
-app.use("/comment", commentRoutes);
 
 /////////////////
 // MIDDLEWARES //
@@ -66,9 +64,21 @@ const forceAuthorize = (req, res, next) => {
 // MIDDLEWARES ENDS//
 ////////////////////
 
-app.get("/", (req, res) => {
-  res.render("home");
+app.get("/", async (req, res) => {
+  const posts = await PostsModel.find().lean();
+
+  res.render("home", { posts });
 });
+
+
+// ROUTES
+
+app.use("/user", userRoutes);
+app.use("/post", postRoutes);
+app.use("/comment", commentRoutes);
+app.use("/seed-data", seedDataRoutes);
+
+// END OF ROUTES
 
 // Login //
 app.post("/login", async (req, res) => {
@@ -125,18 +135,6 @@ app.get("/sign-up-extra", (req, res) => {
 app.get("/secret2", forceAuthorize, (req, res) => {
   res.send("This is a secret page");
 });
-
-///////////
-// POSTS //
-///////////
-
-app.use("/post", postRoutes);
-
-//////////////////
-// END OF POSTS //
-//////////////////
-
-app.use("/seed-data", seedDataRoutes);
 
 app.post("/log-out", (req, res) => {
   res.cookie("token", "", { maxAge: 0 });
