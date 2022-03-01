@@ -105,7 +105,7 @@ const followthem = async (req, res, next) => {
 app.get("/", sortPosts, followthem, async (req, res) => {
   let posts = req.sortPosts;
   let followthem = req.followthem;
-
+  console.log(posts);
   res.render("home", { posts, followthem });
 });
 
