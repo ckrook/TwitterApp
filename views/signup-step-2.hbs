@@ -7,20 +7,48 @@
     </p>
     <div class="p-8 mt-6 mb-0 rounded-lg shadow-2xl">
     <form
-      action="/login"
-      class="space-y-4"
+      action="/sign-up-extra"
+      class="space-y-4" method="POST"
     >
       <p class="text-lg font-medium">Add some extra details to your profile</p>
 
+        <div>
+        <label for="dateOfBirth" class="text-sm font-medium">Date of birth</label>
+          <input class="w-full p-3 text-sm border-gray-200 rounded-lg" placeholder="Select birthdate" type="date" id="dateOfBirth" name="dateOfBirth" />
+            <p class="text-sm text-left text-gray-500 py-5">This will not be shown publicly.</p>
+        </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+            <label for="city" class="text-sm font-medium">City</label>
+              <input
+                class="w-full p-3 text-sm border-gray-200 rounded-lg"
+                placeholder="City"
+                type="text"
+                id="city" name="city"
+              />
+            </div>
+
+            <div>
+              <label for="phone-number" class="text-sm font-medium">Phone number</label>
+              <input
+                class="w-full p-3 text-sm border-gray-200 rounded-lg"
+                placeholder="+000 000 00 00"
+                type="tel"
+                id="phone" name="phone-number"
+              />
+            </div>
+          </div>
+  
       <div>
-        <label for="email" class="text-sm font-medium">Bio</label>
+        <label for="bio" class="text-sm font-medium">Bio</label>
 
         <div class="relative mt-1">
           <textarea
-            type="email"
-            id="email"
+            type="text"
+            id="bio" name="bio"
             class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Enter username"
+            placeholder="Write something about yourself"
           /></textarea>
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
@@ -29,15 +57,15 @@
         </div>
       </div>
       <div>
-        <label for="email" class="text-sm font-medium">Profile picture</label>
 
-        <div class="relative mt-1">
-          <input
-            type="email"
-            id="email"
-            class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Enter email"
+        <label for="profile-picture" class="text-sm font-medium">Profile picture</label>
+        
+        <form method="POST" enctype="multipart/form-data" action="/upload">
+          <input type="file" name="file" id="profile-picture" name="profile-picture"
+            class="w-full p-4 pr-12 my-5 text-sm border-gray-200 rounded-lg shadow-sm"
+            placeholder="Choose file"
           />
+      </form>
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
             <svg
@@ -56,9 +84,7 @@
             </svg>
           </span>
         </div>
-      </div>
-
-
+        
 
       <button
         type="submit"
@@ -66,10 +92,12 @@
       >
         Complete profile
       </button>
+      </div>
+
     <p class="text-sm text-center text-gray-500">
     </form>
-      <form action="/" method="get">
-        <button class="underline" href="/">Lets do this later..</button>
+      <form action="/home" method="GET">
+        <button class="underline my-5" href="/">Lets do this later..</button>
       </form>
     </div>
     </p>

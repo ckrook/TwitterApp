@@ -4,16 +4,40 @@ const usersSchema = new mongoose.Schema({
   username: { type: String, required: true },
   hashedPassword: { type: String, required: true },
   email: { type: String, required: true },
-  city: { type: String, required: true},
-  dateOfBirth: { type: Number, required: true },
+  city: { type: String },
+  dateOfBirth: { type: Number },
   created: { type: Number, default: Date.now },
   role: { type: String, default: "User" },
-  bio: String,
+  bio: { type: String, default: "" },
   profilePicture: String,
-  posts: [],
-  likedPosts: []
+  posts: [
+    {
+      type: String,
+      default: [],
+    },
+  ],
+  follows: [
+    {
+      type: String,
+      default: [],
+    },
+  ],
+  follows_count: { type: Number },
+  followers: [
+    {
+      type: String,
+      default: [],
+    },
+  ],
+  follower_count: { type: Number },
+  likedPosts: [
+    {
+      type: String,
+      default: [],
+    },
+  ],
 });
 
-const Usersmodel = mongoose.model("Users", usersSchema);
+const UsersModel = mongoose.model("Users", usersSchema);
 
-module.exports = Usersmodel;
+module.exports = UsersModel;
