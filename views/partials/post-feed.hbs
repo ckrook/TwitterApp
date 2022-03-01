@@ -1,6 +1,6 @@
 {{#each posts}}
 <div
-  class="flex flex-col p-10 gap-10 border-r border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
+  class="flex flex-col w-[600px] p-10 gap-10 border-r border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
 >
   <div class="flex gap-10">
     <div class="avatar">
@@ -15,7 +15,7 @@
         <h2><b>@{{author_name}}</b></h2>
         <span class="text-gray-400">{{created}}</span>
       </div>
-      <p>
+      <p class="break-words break-all">
         {{content}}
       </p>
     </div>
