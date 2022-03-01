@@ -9,7 +9,8 @@ const postsSchema = new mongoose.Schema({
     retweet_count: { type: Number, default: 0 },
     comments: [{
         type: String
-    }]
+    }],
+    comments_count: { type: Number, default: 0 }
 });
 
 const PostsModel = mongoose.model("Posts", postsSchema);

@@ -64,11 +64,10 @@ const { forceAuthorize, followthem, sortPosts } = require("./middleware");
 ////////////////////
 
 app.get("/", sortPosts, followthem, async (req, res) => {
-  const postsCollection = await PostsModel.find().lean();
-
   let posts = req.sortPosts;
   let followthem = req.followthem;
-  res.render("home", { posts, followthem, postsCollection});
+  
+  res.render("home", { posts, followthem});
 });
 
 // ROUTES
