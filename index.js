@@ -122,13 +122,14 @@ app.use("/seed-data", seedDataRoutes);
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   UsersModel.findOne({ username }, (err, user) => {
-    if (user && utils.comparePassword(password, user.hashed_password)) {
+    if (user && utils.comparePassword(password, user.hashedPassword)) {
       // Login successful
       const userData = { userId: user._id, username };
       const accesToken = jwt.sign(userData, process.env.JWTSECRET);
       res.cookie("token", accesToken);
       res.redirect("/");
     } else {
+      console.log(err);
       res.send("Login failed");
     }
   });
