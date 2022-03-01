@@ -27,12 +27,13 @@ router.post("/sign-up", (req, res) => {
 router.get("/sign-up-extra", (req, res) => {
   res.render("signup-step-2");
 });
-
+const { forceAuthorize, followthem } = require("./../middleware.js");
 //USER PROFILE
-router.get("/:id", (req, res) => {
+router.get("/:id", followthem, async (req, res) => {
   const id = req.params.id;
+  let followthem = req.followthem;
   console.log(id);
-  res.render("user-profile");
+  res.render("user-profile", followthem);
 });
 
 router.put("/edit", (req, res) => {

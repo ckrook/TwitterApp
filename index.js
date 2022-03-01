@@ -45,6 +45,11 @@ app.use((req, res, next) => {
     res.locals.loggedIn = true;
     res.locals.userId = tokenData.userId;
     res.locals.username = tokenData.username;
+    res.locals.bio = tokenData.bio;
+    res.locals.city = tokenData.city;
+    res.locals.following_count = tokenData.following_count;
+    res.locals.followers_count = tokenData.followers_count;
+    res.locals.posts_count = tokenData.posts_count;
   } else {
     // Not Logged in
     res.locals.loggedin = false;
@@ -52,51 +57,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const forceAuthorize = (req, res, next) => {
-  const { token } = req.cookies;
-  if (token && jwt.verify(token, process.env.JWTSECRET)) {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-};
-
-const sortPosts = async (req, res, next) => {
-  let userId = res.locals.userIdname;
-  let mainUser = await UsersModel.findOne({ userId });
-  let following = mainUser.follows;
-
-  let posts = await PostsModel.find()
-    .sort([["created", "desc"]])
-    .lean();
-  for (let post of posts) {
-    post.created = utils.timeAgo(post.created);
-  }
-
-  console.log(posts);
-  req.sortPosts = posts;
-  next();
-};
-
-const followthem = async (req, res, next) => {
-  let userId = res.locals.userId;
-  let toFollow = await UsersModel.find().lean();
-  let mainUser = await UsersModel.findOne({ userId });
-  mainUser = mainUser.follows;
-  const findFollowers = await UsersModel.find({ _id: { $in: mainUser } });
-  toFollow = toFollow.filter((user) => {
-    return user.username !== res.locals.userIdname;
-  });
-  for (var i = 0; i < toFollow.length; i++) {
-    for (var j = 0; j < findFollowers.length; j++) {
-      if (JSON.stringify(toFollow[i]) == JSON.stringify(findFollowers[j])) {
-        toFollow.splice(i, 1);
-      }
-    }
-  }
-  req.followthem = toFollow;
-  next();
-};
+const { forceAuthorize, followthem, sortPosts } = require("./middleware");
 
 //////////////////////
 // MIDDLEWARES ENDS//
@@ -105,7 +66,6 @@ const followthem = async (req, res, next) => {
 app.get("/", sortPosts, followthem, async (req, res) => {
   let posts = req.sortPosts;
   let followthem = req.followthem;
-  console.log(posts);
   res.render("home", { posts, followthem });
 });
 
@@ -124,8 +84,22 @@ app.post("/login", async (req, res) => {
   UsersModel.findOne({ username }, (err, user) => {
     if (user && utils.comparePassword(password, user.hashedPassword)) {
       // Login successful
-      const userData = { userId: user._id, username };
+      const bio = user.bio;
+      const city = user.city;
+      const following_count = user.follows.length;
+      const followers_count = user.followers.length;
+      const posts_count = user.posts.length;
+      const userData = {
+        userId: user._id,
+        username,
+        bio,
+        city,
+        following_count,
+        followers_count,
+        posts_count,
+      };
       const accesToken = jwt.sign(userData, process.env.JWTSECRET);
+      console.log(userData);
       res.cookie("token", accesToken);
       res.redirect("/");
     } else {

@@ -21,7 +21,7 @@
     </div>
     <div>
       <h2 class="text-2xl font-bold">{{username}}</h2>
-      <p class="text-gray-400">200 tweets</p>
+      <p class="text-gray-400">{{posts_count}} tweets</p>
     </div>
   </div>
 </div>
@@ -48,17 +48,17 @@
 
       <h2 class="text-2xl font-bold">{{username}}</h2>
       <p class="text-gray-500">@{{username}}</p>
-      <p class="mb-4">This is a description for this profile</p>
+      <p class="mb-4">{{bio}}</p>
       <div class="flex justify-start space-x-4 text-gray-500 text-lg mb-4">
-        <div>Stockholm</div>
+        <div>{{city}}</div>
         <div>website.com</div>
         <div>Joined January 2012</div>
       </div>
       <div
         class="flex justify-start space-x-4 text-gray-500 text-lg font-medium"
       >
-        <div><b class="text-black">30</b> Following</div>
-        <div><b class="text-black">90</b> Followers</div>
+        <div><b class="text-black">{{following_count}}</b> Following</div>
+        <div><b class="text-black">{{followers_count}}</b> Followers</div>
       </div>
     </div>
   </div>
