@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const usersSchema = new mongoose.Schema({
   username: { type: String, required: true },
+  displayname: { type: String, required: true },
   hashedPassword: { type: String, required: true },
   email: { type: String, required: true },
   city: { type: String },
@@ -9,6 +10,7 @@ const usersSchema = new mongoose.Schema({
   created: { type: Number, default: Date.now },
   role: { type: String, default: "User" },
   bio: { type: String, default: "" },
+  website: { type: String },
   profilePicture: String,
   posts: [
     {
