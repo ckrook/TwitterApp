@@ -4,8 +4,9 @@ const usersSchema = new mongoose.Schema({
   username: { type: String, required: true },
   hashedPassword: { type: String, required: true },
   email: { type: String, required: true },
-  city: { type: String, required: true },
-  date_of_birth: { type: Number, required: true },
+  city: { type: String },
+  description: { type: String, default: "" },
+  dateOfBirth: { type: Number },
   created: { type: Number, default: Date.now },
   role: { type: String, default: "User" },
   bio: String,
@@ -13,11 +14,19 @@ const usersSchema = new mongoose.Schema({
   posts: [
     {
       type: String,
+      default: [],
     },
   ],
-  liked_posts: [
+  follows: [
     {
       type: String,
+      default: [],
+    },
+  ],
+  likedPosts: [
+    {
+      type: String,
+      default: [],
     },
   ],
 });
