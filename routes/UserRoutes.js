@@ -1,4 +1,5 @@
 const express = require("express");
+const UsersModel = require("../models/UsersModel.js");
 const router = express.Router();
 
 //LOG IN
@@ -32,8 +33,7 @@ const { forceAuthorize, followthem } = require("./../middleware.js");
 router.get("/:id", followthem, async (req, res) => {
   const id = req.params.id;
   let followthem = req.followthem;
-  console.log(id);
-  res.render("user-profile", followthem);
+  res.render("user-profile", { followthem });
 });
 
 router.put("/edit", (req, res) => {

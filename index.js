@@ -66,8 +66,8 @@ const { forceAuthorize, followthem, sortPosts } = require("./middleware");
 app.get("/", sortPosts, followthem, async (req, res) => {
   let posts = req.sortPosts;
   let followthem = req.followthem;
-  
-  res.render("home", { posts, followthem});
+
+  res.render("home", { posts, followthem });
 });
 
 // ROUTES
@@ -100,7 +100,7 @@ app.post("/login", async (req, res) => {
         posts_count,
       };
       const accesToken = jwt.sign(userData, process.env.JWTSECRET);
-      console.log(userData);
+
       res.cookie("token", accesToken);
       res.redirect("/");
     } else {
