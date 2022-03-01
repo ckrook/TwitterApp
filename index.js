@@ -11,6 +11,8 @@ const utils = require("./utils.js");
 const userRoutes = require("./routes/UserRoutes.js");
 const postRoutes = require("./routes/PostRoutes.js");
 const commentRoutes = require("./routes/CommentRoutes.js");
+const seedDataRoutes = require("./routes/SeedDataRoutes.js");
+const PostsModel = require("./models/PostsModel.js");
 
 const app = express();
 
@@ -32,7 +34,7 @@ app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-/////////////////
+//////////////////
 // MIDDLEWARES //
 ////////////////
 app.use((req, res, next) => {
@@ -43,6 +45,11 @@ app.use((req, res, next) => {
     res.locals.loggedIn = true;
     res.locals.userId = tokenData.userId;
     res.locals.username = tokenData.username;
+    res.locals.bio = tokenData.bio;
+    res.locals.city = tokenData.city;
+    res.locals.following_count = tokenData.following_count;
+    res.locals.followers_count = tokenData.followers_count;
+    res.locals.posts_count = tokenData.posts_count;
   } else {
     // Not Logged in
     res.locals.loggedin = false;
@@ -50,25 +57,27 @@ app.use((req, res, next) => {
   next();
 });
 
-const forceAuthorize = (req, res, next) => {
-  const { token } = req.cookies;
-  if (token && jwt.verify(token, process.env.JWTSECRET)) {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-};
-/////////////////////
+const { forceAuthorize, followthem, sortPosts } = require("./middleware");
+
+//////////////////////
 // MIDDLEWARES ENDS//
 ////////////////////
+
+app.get("/", sortPosts, followthem, async (req, res) => {
+  let posts = req.sortPosts;
+  let followthem = req.followthem;
+
+  res.render("home", { posts, followthem });
+});
+
+// ROUTES
 
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
+app.use("/seed-data", seedDataRoutes);
 
-app.get("/", (req, res) => {
-  res.render("home");
-});
+// END OF ROUTES
 
 // Login //
 app.post("/login", async (req, res) => {
@@ -76,11 +85,26 @@ app.post("/login", async (req, res) => {
   UsersModel.findOne({ username }, (err, user) => {
     if (user && utils.comparePassword(password, user.hashedPassword)) {
       // Login successful
-      const userData = { userId: user._id, username };
+      const bio = user.bio;
+      const city = user.city;
+      const following_count = user.follows.length;
+      const followers_count = user.followers.length;
+      const posts_count = user.posts.length;
+      const userData = {
+        userId: user._id,
+        username,
+        bio,
+        city,
+        following_count,
+        followers_count,
+        posts_count,
+      };
       const accesToken = jwt.sign(userData, process.env.JWTSECRET);
+
       res.cookie("token", accesToken);
       res.redirect("/");
     } else {
+      console.log(err);
       res.send("Login failed");
     }
   });
@@ -152,43 +176,6 @@ app.get("/sign-up-extra", (req, res) => {
 
 app.get("/secret2", forceAuthorize, (req, res) => {
   res.send("This is a secret page");
-});
-
-app.get("/seed-data", async (req, res) => {
-  const password = "admin";
-
-  const adminUserCharles = new UsersModel({
-    username: "CharlesKrook",
-    hashedPassword: utils.hashedPassword(password),
-    email: "Charles.Krook@gmail.com",
-    city: "Stockholm",
-    dateOfBirth: 19900101,
-    role: "Admin",
-  });
-  const adminUserAlexia = new UsersModel({
-    username: "AlexiaHellsten",
-    hashedPassword: utils.hashedPassword(password),
-    email: "Alexia.Hellsten@gmail.com",
-    city: "Stockholm",
-    dateOfBirth: 19900101,
-    role: "Admin",
-  });
-  const adminUserSimon = new UsersModel({
-    username: "SimonSandahl",
-    hashedPassword: utils.hashedPassword(password),
-    email: "Simon.Sandahl@gmail.com",
-    city: "Stockholm",
-    dateOfBirth: 19900101,
-    role: "Admin",
-  });
-
-  await adminUserCharles.save();
-  await adminUserAlexia.save();
-  await adminUserSimon.save();
-
-  res.send(
-    "Boom admins are created! Gå bara hit en gång dock annars blir de nog knas. Kolla i mongodb compass så användarna finns där"
-  );
 });
 
 app.post("/log-out", (req, res) => {
