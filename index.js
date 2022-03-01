@@ -87,45 +87,59 @@ app.post("/login", async (req, res) => {
 });
 
 //Sign up
-app.post("/sign-up", async (req, res) => {
-  res.render("signup");
-  const { username, password, confirmPassword, email} = req.body;
+app.post("/sign-up", async (req, res, next) => {
 
+ const { username, password, confirmPassword, email} = req.body;
+
+try {
+  const newUser = new UsersModel({
+    username: req.body.username,
+    hashedPassword: utils.hashedPassword(password),
+    email: req.body.email,
+    city: req.body.city,
+    dateOfBirth: req.body.dateOfBirth,
+    created: Date.now(),
+    role: "User",
+    bio: req.body.bio,
+    profilePicture: req.body.profilePicture,
+    posts: req.body.posts,
+    likedPosts: req.body.likedPosts
+  });
+  
   UsersModel.findOne({ username }, async (err, user) => {
     if (user) {
       return res.status(400).send('Username is already taken');
     }
-
-    UsersModel.findOne({ email }, async (err, user) => {
-    if (email == user.email) {
-      return res.status(400).send("Email already in use");
-    }
-    
-    UsersModel.findOne({ password }, async (err, user) => {
-    if (password !== confirmPassword) {
-      return res.status(400).send("Passwords don't match");
-    }
-    
-      const newUser = new UsersModel({
-        username: req.body.username,
-        hashedPassword: utils.hashedPassword(password),
-        email: req.body.email,
-        city: req.body.city,
-        dateOfBirth: req.body.dateOfBirth,
-        created: Date.now(),
-        role: "User",
-        bio: req.body.bio,
-        profilePicture: req.body.profilePicture,
-        posts: req.body.posts,
-        likedPosts: req.body.likedPosts
-      });
-
-      await newUser.save();
-      res.redirect("/");
-    });
   });
+
+  UsersModel.findOne( { email }, async (err, user) => {
+    if (email == username.email) {
+      return res.status(400).send('Email is already in use');
+  }
+  });
+
+  //Password comparison - fix later
+  // if (password !== confirmPassword) {
+  //   return res.status(400).send("Passwords don't match");
+  //  } 
+
+  await newUser.save();
+  res.redirect("/sign-up-extra");
+}
+
+catch (err) {
+    return res.status(400).send("Something went wrong");
+    res.redirect("/");
+  }
 });
+
+//Sign up step 2
+app.post("/sign-up-extra", (req, res) => {
+
+  //Update the newUser
+
 });
+
 
 app.get("/sign-up", (req, res) => {
   res.render("signup");
@@ -134,6 +148,7 @@ app.get("/sign-up", (req, res) => {
 app.get("/sign-up-extra", (req, res) => {
   res.render("signup-step-2");
 });
+
 
 app.get("/secret2", forceAuthorize, (req, res) => {
   res.send("This is a secret page");
