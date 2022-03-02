@@ -12,7 +12,8 @@
     >
       <p class="text-lg font-medium">Sign up to your account</p>
 
-      <div>
+{{!-- GAMMAL KOD --}}
+      {{!-- <div>
         <label for="username" class="text-sm font-medium">Username</label>
 
         <div class="relative mt-1">
@@ -40,7 +41,34 @@
             </svg>
           </span>
         </div>
+      </div> --}}
+    {{!-- SLUT GAMMAL KOD --}}
+
+{{!-- NY KOD --}}
+
+<div class="grid grid-rows-2 grid-flow-col gap-4">
+    <label for="username" class="text-sm font-medium">Username</label>
+      <div>
+       <input
+            type="text"
+            id="username" name="username" 
+            class="w-full p-4 pr-5 text-sm border-gray-200 rounded-lg shadow-sm"
+            placeholder="Enter username" pattern="^[a-zA-Z0-9]{4,10}$" title="No special characters allowed" required
+          />
+          </div>
+    <label for="displayname" class="text-sm font-medium">Displayname</label>
+      <div>
+        <input
+            type="text"
+            id="displayname" name="displayname" 
+            class="w-full p-4 pr-5 text-sm border-gray-200 rounded-lg shadow-sm"
+            placeholder="Enter displayname" pattern="^[a-zA-Z0-9]{4,10}$" title="No special characters allowed" required
+          />
+          </div>
       </div>
+
+{{!-- SLUT NY KOD --}}
+
       <div>
         <label for="email" class="text-sm font-medium">Email</label>
 

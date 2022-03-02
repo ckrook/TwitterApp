@@ -118,6 +118,7 @@ app.post("/sign-up", async (req, res, next) => {
 try {
   const newUser = new UsersModel({
     username: req.body.username,
+    displayname: req.body.displayname,
     hashedPassword: utils.hashedPassword(password),
     email: req.body.email,
     city: req.body.city,
@@ -125,6 +126,7 @@ try {
     created: Date.now(),
     role: "User",
     bio: req.body.bio,
+    website: req.body.website,
     profilePicture: req.body.profilePicture,
     posts: req.body.posts,
     likedPosts: req.body.likedPosts
