@@ -36,8 +36,8 @@
       </svg>
       <a href="" class="hidden sm:block">{{comments_count}}</a>
     </div>
-    <form action="/post/retweet" method="post" class="mb-0">
-      <label for="retweet_post">
+    <form action="/post/{{_id}}/retweet" method="post" class="mb-0">
+      <label for="retweet_post_{{_id}}">
         <div>
           <div class="flex items-center justify-center space-x-2">
             <svg
@@ -62,10 +62,10 @@
           </div>
         </div>
       </label>
-      <input type="submit" id="retweet_post" hidden>
+      <input type="submit" id="retweet_post_{{_id}}" hidden>
     </form>
-    <form action="/post/liked" method="post" class="mb-0">
-      <label for="liked_post">
+    <form action="/post/{{_id}}/liked" method="post" class="mb-0">
+      <label for="liked_post_{{_id}}">
         <div>
           <div class="flex items-center justify-center space-x-2">
             <svg
@@ -86,7 +86,7 @@
           </div>
         </div>
       </label>
-      <input type="submit" id="liked_post" hidden>
+      <input type="submit" id="liked_post_{{_id}}" hidden>
     </form>
     <div>
       <div class="flex items-center justify-center space-x-2">

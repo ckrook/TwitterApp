@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const PostsModel = require("../models/PostsModel.js");
+const UsersModel = require('../models/UsersModel.js');
 
 router.get("/", (req, res) => {
   res.render("start");
@@ -40,6 +41,29 @@ router.put("/edit", (req, res) => {
 
 router.delete("/delete", (req, res) => {
   res.redirect("delete-post");
+});
+
+router.post("/:id/liked", async (req, res) => {
+  // const clickedPost = await PostsModel.findById(req.params.id).lean(); 
+  // const user = await UsersModel.findById(res.locals.userId).lean();
+  // const postId = req.params.id;
+  
+  // +-
+  // const updatedCount = clickedPost.like_count++;
+
+  // PostsModel.updateOne({ _id: postId }, { like_count: updatedCount});
+
+  // console.log(clickedPost.like_count);
+
+  // res.redirect("/");
+});
+
+router.post("/:id/reweet", async (req, res) => {
+  const post = await PostsModel.findById(req.params.id).lean(); 
+
+  console.log(post);
+
+  res.redirect("/");
 });
 
 module.exports = router;

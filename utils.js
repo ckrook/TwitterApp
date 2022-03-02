@@ -9,6 +9,7 @@ const comparePassword = (password, hash) => {
   const correct = bcrypt.compareSync(password, hash);
   return correct;
 };
+
 function timeAgo(input) {
   //https://stackoverflow.com/a/69122877/1977850
   const date = input instanceof Date ? input : new Date(input);

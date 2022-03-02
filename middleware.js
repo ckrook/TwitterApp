@@ -22,7 +22,7 @@ const sortPosts = async (req, res, next) => {
     post.created = utils.timeAgo(post.created);
   }
 
-  console.log(posts);
+  // console.log(posts);
   req.sortPosts = posts;
   next();
 };
