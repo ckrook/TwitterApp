@@ -3,18 +3,22 @@
     class="flex p-10 space-x-5 border-r border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
   >
     <div class="avatar">
-      <img
-        class="rounded-full w-16"
-        src="https://via.placeholder.com/150"
-        alt=""
-      />
+      <a href="/user/{{author_id}}">
+        <img
+          class="rounded-full w-16"
+          src="https://via.placeholder.com/150"
+          alt=""
+        />
+      </a>
     </div>
     <div class="flex flex-col w-full gap-5">
       <div class="flex gap-5">
 
         <div class="w-full flex flex-col">
           <div class="flex space-x-2">
-            <h2><b>@{{author_name}}</b></h2>
+            <a href="/user/{{author_id}}">
+              <h2><b>@{{author_name}}</b></h2>
+            </a>
             <span class="text-gray-400">{{created}}</span>
           </div>
           <p class="break-words break-all">

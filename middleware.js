@@ -21,8 +21,6 @@ const sortPosts = async (req, res, next) => {
   for (let post of posts) {
     post.created = utils.timeAgo(post.created);
   }
-
-  console.log(posts);
   req.sortPosts = posts;
   next();
 };

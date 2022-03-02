@@ -112,48 +112,43 @@ app.post("/login", async (req, res) => {
 
 //Sign up
 app.post("/sign-up", async (req, res, next) => {
+  const { username, password, confirmPassword, email } = req.body;
 
- const { username, password, confirmPassword, email} = req.body;
+  try {
+    const newUser = new UsersModel({
+      username: req.body.username,
+      hashedPassword: utils.hashedPassword(password),
+      email: req.body.email,
+      city: req.body.city,
+      dateOfBirth: req.body.dateOfBirth,
+      created: Date.now(),
+      role: "User",
+      bio: req.body.bio,
+      profilePicture: req.body.profilePicture,
+      posts: req.body.posts,
+      likedPosts: req.body.likedPosts,
+    });
 
-try {
-  const newUser = new UsersModel({
-    username: req.body.username,
-    displayname: req.body.displayname,
-    hashedPassword: utils.hashedPassword(password),
-    email: req.body.email,
-    city: req.body.city,
-    dateOfBirth: req.body.dateOfBirth,
-    created: Date.now(),
-    role: "User",
-    bio: req.body.bio,
-    website: req.body.website,
-    profilePicture: req.body.profilePicture,
-    posts: req.body.posts,
-    likedPosts: req.body.likedPosts
-  });
-  
-  UsersModel.findOne({ username }, async (err, user) => {
-    if (user) {
-      return res.status(400).send('Username is already taken');
-    }
-  });
+    UsersModel.findOne({ username }, async (err, user) => {
+      if (user) {
+        return res.status(400).send("Username is already taken");
+      }
+    });
 
-  UsersModel.findOne( { email }, async (err, user) => {
-    if (email == username.email) {
-      return res.status(400).send('Email is already in use');
-  }
-  });
+    UsersModel.findOne({ email }, async (err, user) => {
+      if (email == username.email) {
+        return res.status(400).send("Email is already in use");
+      }
+    });
 
-  //Password comparison - fix later
-  // if (password !== confirmPassword) {
-  //   return res.status(400).send("Passwords don't match");
-  //  } 
+    //Password comparison - fix later
+    // if (password !== confirmPassword) {
+    //   return res.status(400).send("Passwords don't match");
+    //  }
 
-  await newUser.save();
-  res.redirect("/sign-up-extra");
-}
-
-catch (err) {
+    await newUser.save();
+    res.redirect("/sign-up-extra");
+  } catch (err) {
     return res.status(400).send("Something went wrong");
     res.redirect("/");
   }
@@ -161,11 +156,8 @@ catch (err) {
 
 //Sign up step 2
 app.post("/sign-up-extra", (req, res) => {
-
   //Update the newUser
-
 });
-
 
 app.get("/sign-up", (req, res) => {
   res.render("signup");

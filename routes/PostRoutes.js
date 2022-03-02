@@ -28,7 +28,6 @@ router.post("/new", async (req, res) => {
       content: content,
     });
     const user = await UsersModel.findOne({ userId });
-    console.log(user);
 
     await newPost.save();
 
