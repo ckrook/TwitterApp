@@ -113,97 +113,72 @@ app.post("/login", async (req, res) => {
 app.get("/", (req, res) => {
   res.render("login-module");
 });
-
+app.get("/sign-up", (req, res) => {
+  res.render("signup");
+});
 //Sign up
 app.post("/sign-up", async (req, res, next) => {
-  const { username, password, confirmPassword, email } = req.body;
+  const { username, password, confirmpassword, email } = req.body;
 
-  try {
+  UsersModel.findOne({ username }, async (err, user) => {
+    if (user) return res.status(400).send("Username is already taken");
+    if (password !== confirmpassword)
+      return res.status(400).send("Password dont match");
+    UsersModel.findOne({ email }, async (err, user) => {
+      if (email === username.email)
+        return res.status(400).send("Email is already in use");
+    });
+
     const newUser = new UsersModel({
       username: req.body.username,
       displayname: req.body.displayname,
       hashedPassword: utils.hashedPassword(password),
       email: req.body.email,
-      city: req.body.city,
-      dateOfBirth: req.body.dateOfBirth,
       created: Date.now(),
       role: "User",
-      bio: req.body.bio,
-      website: req.body.website,
-      profilePicture: req.body.profilePicture,
-      posts: req.body.posts,
-      likedPosts: req.body.likedPosts,
     });
-
-    UsersModel.findOne({ username }, async (err, user) => {
-      if (user) {
-        // return res.status(400).send("Username is already taken");
-        console.log("Username taken");
-      }
-    });
-
-    UsersModel.findOne({ email }, async (err, user) => {
-      if (email == username.email) {
-        // return res.status(400).send("Email is already in use");
-        console.log("Email taken");
-      }
-    });
-
-    //Password comparison - fix later
-    // if (password !== confirmPassword) {
-    //   return res.status(400).send("Passwords don't match");
-    //  }
-
     await newUser.save();
-    res.redirect("/sign-up-extra");
-  } catch (err) {
-    console.log(err);
-    return res.status(400).send("Something went wrong");
-    res.redirect("/");
-  }
+    UsersModel.findOne({ username }, (err, user) => {
+      if (user && utils.comparePassword(password, user.hashedPassword)) {
+        // Login successful
+        const bio = user.bio;
+        const city = user.city;
+        const following_count = user.follows.length;
+        const followers_count = user.followers.length;
+        const posts_count = user.posts.length;
+        const userData = {
+          userId: user._id,
+          username,
+          bio,
+          city,
+          following_count,
+          followers_count,
+          posts_count,
+        };
+        const accesToken = jwt.sign(userData, process.env.JWTSECRET);
+
+        res.cookie("token", accesToken);
+      }
+    });
+
+    res.render("signup-step-2");
+  });
 });
 
 //Sign up step 2
-app.post("/sign-up-extra", (req, res) => {
-  async function completeProfile() {
-    //Hitta senaste sparade ID:t
-    const dbUser = await UsersModel.find().sort({ _id: -1 }).limit(1)[0];
+app.post("/sign-up-extra", async (req, res) => {
+  const id = res.locals.userId;
+  const { dateOfBirth, city, phonenumber, website, bio } = req.body;
+  let dbUser = await UsersModel.findOne({ _id: id });
+  dbUser.dateOfBirth = dateOfBirth;
+  dbUser.city = city;
+  dbUser.phonenumber = phonenumber;
+  dbUser.website = website;
+  dbUser.bio = bio;
 
-    try {
-      //Skapar ny variabel att spara den uppdaterade användaren i
-      const updatedUser = new UsersModel({
-        username: username,
-        displayname: displayname,
-        hashedPassword: hashedPassword,
-        email: email,
-        city: req.body.city,
-        dateOfBirth: req.body.dateOfBirth,
-        created: created,
-        role: "User",
-        bio: req.body.bio,
-        website: req.body.website,
-        profilePicture: req.body.profilePicture,
-        posts: req.body.posts,
-        likedPosts: req.body.likedPosts,
-      });
+  await dbUser.save();
 
-      dbUser === updatedUser;
-      //Sparar den nya variabeln och skickar in den i vår kollektion
-      await updatedUser.save();
-
-      // await UsersModel.updateOne(updatedUser);
-
-      res.redirect("/login");
-    } catch (err) {
-      return res
-        .status(400)
-        .send("Something went wrong, unable to complete profile");
-    }
-  }
-});
-
-app.get("/sign-up", (req, res) => {
-  res.render("signup");
+  res.redirect("/");
 });
 
 app.get("/sign-up-extra", (req, res) => {

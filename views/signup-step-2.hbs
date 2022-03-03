@@ -35,7 +35,7 @@
                 class="w-full p-3 text-sm border-gray-200 rounded-lg"
                 placeholder="+000 000 00 00"
                 type="tel"
-                id="phone" name="phone-number"
+                id="phone" name="phonenumber"
               />
             </div>
           </div>
@@ -45,10 +45,10 @@
         <label for="website" class="text-sm font-medium">Website</label>
         <div class="relative mt-1">
           <input
-            type="url"
+            type="text"
             id="website" name="website" 
             class="w-full p-4 pr-12 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Enter URL" pattern="/http(s?)(:\/\/)((www.)?)([a-zA-z0-9\-_]+)(.[a-zA-z0-9\-_])"
+            placeholder="Enter URL"
           />
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
@@ -90,13 +90,7 @@
       <div>
 
         <label for="profile-picture" class="text-sm font-medium">Profile picture</label>
-        
-        <form method="POST" enctype="multipart/form-data" action="/upload">
-          <input type="file" name="file" id="profile-picture" name="profile-picture"
-            class="w-full p-4 pr-12 my-5 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Choose file"
-          />
-      </form>
+
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
             <svg
@@ -127,7 +121,7 @@
 
     <p class="text-sm text-center text-gray-500">
     </form>
-      <form action="/home" method="GET">
+      <form action="/" method="get">
         <button class="underline my-5" href="/">Lets do this later..</button>
       </form>
     </div>
