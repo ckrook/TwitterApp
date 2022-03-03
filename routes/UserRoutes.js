@@ -1,7 +1,9 @@
 const express = require("express");
 const UsersModel = require("../models/UsersModel.js");
 const router = express.Router();
-
+const mongoose = require("mongoose");
+const { ObjectId } = require("mongodb");
+const { timeAgo } = require("./../utils");
 //LOG IN
 router.get("/", (req, res) => {
   res.render("signup");
@@ -29,11 +31,23 @@ router.get("/sign-up-extra", (req, res) => {
   res.render("signup-step-2");
 });
 const { forceAuthorize, followthem } = require("./../middleware.js");
+const PostsModel = require("../models/PostsModel.js");
+
 //USER PROFILE
 router.get("/:id", followthem, async (req, res) => {
+  let edit = false;
   const id = req.params.id;
   let followthem = req.followthem;
-  res.render("user-profile", { followthem });
+  const profile = await UsersModel.findOne({ _id: id }).lean();
+  const posts = await PostsModel.find({ author_id: id }).lean();
+
+  for (let post of posts) {
+    post.created = timeAgo(post.created);
+  }
+  if (id === res.locals.userId) {
+    edit = true;
+  }
+  res.render("user-profile", { followthem, posts, profile, edit });
 });
 
 router.put("/edit", (req, res) => {

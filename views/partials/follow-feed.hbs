@@ -3,17 +3,19 @@
 {{#each followthem}}
   <div class="flex justify-between mb-4">
     <div class="flex items-center">
-      <div>
-        <img
-          class="w-16 mr-2"
-          src="https://avatars.githubusercontent.com/u/5972004?v=4?s=400"
-          alt=""
-        />
-      </div>
-      <div>
-        <p><b>{{username}}</b></p>
-        <p class="text-gray-600">@{{username}}</p>
-      </div>
+      <a href="/user/{{_id}}" class="flex">
+        <div>
+          <img
+            class="w-16 mr-2"
+            src="https://avatars.githubusercontent.com/u/5972004?v=4?s=400"
+            alt=""
+          />
+        </div>
+        <div>
+          <p><b>{{username}}</b></p>
+          <p class="text-gray-600">@{{username}}</p>
+        </div>
+      </a>
     </div>
     <div class="flex items-center">
       <form

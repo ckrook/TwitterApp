@@ -4,12 +4,18 @@ const router = express.Router();
 const PostsModel = require("../models/PostsModel.js");
 const UsersModel = require("../models/UsersModel");
 
+const { forceAuthorize, followthem, sortPosts } = require("../middleware.js");
+
 router.get("/", (req, res) => {
   res.render("start");
 });
 
-router.get("/single", (req, res) => {
-  res.redirect("single-post");
+router.get("/single/:id", followthem ,  async (req, res) => {
+  const post = await PostsModel.findById(req.params.id).lean();
+
+  let followthem = req.followthem;
+
+  res.render("post-single-home", { post, followthem });
 });
 
 router.post("/new", async (req, res) => {
@@ -28,7 +34,6 @@ router.post("/new", async (req, res) => {
       content: content,
     });
     const user = await UsersModel.findOne({ userId });
-    console.log(user);
 
     await newPost.save();
 
