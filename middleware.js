@@ -12,8 +12,6 @@ const forceAuthorize = (req, res, next) => {
 };
 
 const sortPosts = async (req, res, next) => {
-  let userId = res.locals.userIdname;
-
   let posts = await PostsModel.find()
     .sort([["created", "desc"]])
     .lean();
@@ -25,22 +23,26 @@ const sortPosts = async (req, res, next) => {
 };
 
 const followthem = async (req, res, next) => {
-  let userId = res.locals.userId;
-  let toFollow = await UsersModel.find().lean();
-  let mainUser = await UsersModel.findOne({ userId });
-  mainUser = mainUser.follows;
-  const findFollowers = await UsersModel.find({ _id: { $in: mainUser } });
-  toFollow = toFollow.filter((user) => {
-    return user.username !== res.locals.userIdname;
-  });
-  for (var i = 0; i < toFollow.length; i++) {
-    for (var j = 0; j < findFollowers.length; j++) {
-      if (JSON.stringify(toFollow[i]) == JSON.stringify(findFollowers[j])) {
-        toFollow.splice(i, 1);
+  if (res.locals.userId) {
+    let userId = res.locals.userId;
+    let toFollow = await UsersModel.find().lean();
+    let mainUser = await UsersModel.findOne({ _id: userId });
+
+    const findFollowers = await UsersModel.find({
+      _id: { $in: mainUser.follows },
+    });
+    toFollow = toFollow.filter((user) => {
+      return user.username !== res.locals.username;
+    });
+    for (var i = 0; i < toFollow.length; i++) {
+      for (var j = 0; j < findFollowers.length; j++) {
+        if (JSON.stringify(toFollow[i]) == JSON.stringify(findFollowers[j])) {
+          toFollow.splice(i, 1);
+        }
       }
     }
+    req.followthem = toFollow;
   }
-  req.followthem = toFollow;
   next();
 };
 
