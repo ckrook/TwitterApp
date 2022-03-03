@@ -125,6 +125,7 @@ app.post("/sign-up", async (req, res, next) => {
       hashedPassword: utils.hashedPassword(password),
       email: req.body.email,
       city: req.body.city,
+      phonenumber: req.body.phonenumber,
       dateOfBirth: req.body.dateOfBirth,
       created: Date.now(),
       role: "User",
@@ -156,50 +157,79 @@ app.post("/sign-up", async (req, res, next) => {
 
     await newUser.save();
     res.redirect("/sign-up-extra");
+
   } catch (err) {
     console.log(err);
-    return res.status(400).send("Something went wrong");
+    // return res.status(400).send("Something went wrong");
+    console.log("Something went wrong");
     res.redirect("/");
   }
 });
 
 //Sign up step 2
 app.post("/sign-up-extra", (req, res) => {
-  async function completeProfile() {
-    //Hitta senaste sparade ID:t
-    const dbUser = await UsersModel.find().sort({ _id: -1 }).limit(1)[0];
 
-    try {
-      //Skapar ny variabel att spara den uppdaterade användaren i
-      const updatedUser = new UsersModel({
-        username: username,
-        displayname: displayname,
-        hashedPassword: hashedPassword,
-        email: email,
-        city: req.body.city,
-        dateOfBirth: req.body.dateOfBirth,
-        created: created,
-        role: "User",
-        bio: req.body.bio,
-        website: req.body.website,
-        profilePicture: req.body.profilePicture,
-        posts: req.body.posts,
-        likedPosts: req.body.likedPosts,
-      });
-
-      dbUser === updatedUser;
-      //Sparar den nya variabeln och skickar in den i vår kollektion
-      await updatedUser.save();
-
-      // await UsersModel.updateOne(updatedUser);
-
-      res.redirect("/login");
-    } catch (err) {
-      return res
-        .status(400)
-        .send("Something went wrong, unable to complete profile");
-    }
+const updatedUser = UsersModel.findOneAndUpdate({ _id: id}).sort({_id: -1}.limit(1)[0], 
+{$set: 
+  { 
+  username: req.body.username,
+  displayname: req.body.displayname,
+  hashedPassword: hashedPassword,
+  email: req.body.email,
+  city: req.body.city,
+  phonenumber: req.body.phonenumber,
+  dateOfBirth: req.body.dateOfBirth,
+  created: req.body.created,
+  role: "User",
+  bio: req.body.bio,
+  website: req.body.website,
+  profilePicture: req.body.profilePicture,
+  posts: [],
+  likedPosts: [],
+  new: true
+  }}).exec(function(err, theUser) {
+  if (err) {
+      console.log("Something wrong when updating data!");
   }
+  console.log(theUser);
+  await updatedUser.save();
+  res.redirect("/");
+});
+
+
+    // //Hitta senaste sparade ID:t
+    // const dbUser = UsersModel.findOneAndUpdate({}).sort({ _id: -1 }).limit(1)[0];
+
+    // try {
+    //   //Skapar ny variabel att spara den uppdaterade användaren i
+    //   const updatedUser = new UsersModel({
+    //     username: req.body.username,
+    //     displayname: req.body.displayname,
+    //     hashedPassword: utils.hashedPassword(password),
+    //     email: req.body.email,
+    //     city: req.body.city,
+    //     phonenumber: req.body.phonenumber,
+    //     dateOfBirth: req.body.dateOfBirth,
+    //     created: req.body.created,
+    //     role: "User",
+    //     bio: req.body.bio,
+    //     website: req.body.website,
+    //     profilePicture: req.body.profilePicture,
+    //     posts: req.body.posts,
+    //     likedPosts: req.body.likedPosts,
+    //   });
+    //   //Sparar den nya variabeln och skickar in den i vår kollektion
+    //   await updatedUser.save();
+
+    //   // await UsersModel.updateOne(updatedUser);
+
+    //   res.redirect("/");
+    // } catch (err) {
+    //   // return res
+    //   //   .status(400)
+    //   //   .send("Something went wrong, unable to complete profile");
+    //   console.log("Something went wrong");
+    // }
 });
 
 app.get("/sign-up", (req, res) => {

@@ -6,6 +6,7 @@ const usersSchema = new mongoose.Schema({
   hashedPassword: { type: String, required: true },
   email: { type: String, required: true },
   city: { type: String },
+  phonenumber: { type: Number },
   dateOfBirth: { type: Number },
   created: { type: Number, default: Date.now },
   role: { type: String, default: "User" },
