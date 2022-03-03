@@ -13,7 +13,7 @@
       <div class="w-full flex flex-col">
         <div class="flex space-x-2">
           <h2><b>@{{post.author_name}}</b></h2>
-          <span class="text-gray-400">{{post.created}}</span>
+          <span class="text-gray-400">{{formatDate post.created}}</span>
         </div>
         <p class="break-words break-all">
           {{post.content}}
