@@ -50,6 +50,16 @@ router.get("/:id", followthem, async (req, res) => {
   res.render("user-profile", { followthem, posts, profile, edit });
 });
 
+router.post("/follow", async (req, res) => {
+  const userId = res.locals.userId;
+  const id = req.query.id;
+  console.log(id);
+  console.log(userId);
+  const mainUser = await UsersModel.findOne({ userId });
+  console.log(mainUser);
+  res.redirect("/");
+});
+
 router.put("/edit", (req, res) => {
   res.render("edit-profile");
 });

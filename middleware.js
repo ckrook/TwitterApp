@@ -13,7 +13,6 @@ const forceAuthorize = (req, res, next) => {
 
 const sortPosts = async (req, res, next) => {
   let userId = res.locals.userIdname;
-  let mainUser = await UsersModel.findOne({ userId });
 
   let posts = await PostsModel.find()
     .sort([["created", "desc"]])
