@@ -21,6 +21,7 @@ router.get("/single/:id", followthem ,  async (req, res) => {
 router.post("/new", async (req, res) => {
   const userId = res.locals.userId;
   const username = res.locals.username;
+  const displayname = res.locals.displayname;
   const { content } = req.body;
 
   if (!content || !content.trim()) {
@@ -31,6 +32,7 @@ router.post("/new", async (req, res) => {
     const newPost = new PostsModel({
       author_id: userId,
       author_name: username,
+      author_displayname: displayname,
       content: content,
     });
     const user = await UsersModel.findOne({ userId });
