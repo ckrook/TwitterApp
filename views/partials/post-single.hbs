@@ -11,7 +11,10 @@
       </div>
       <div class="w-full flex flex-col">
         <div class="flex space-x-2">
-          <h2><b>@{{post.author_name}}</b></h2>
+          <h2><b>{{post.author_displayname}}</b></h2>
+        </div>
+        <div class="flex space-x-2">
+          <h2 class="text-gray-400">@{{post.author_name}}</h2>
         </div>
       </div>
     </div>

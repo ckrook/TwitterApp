@@ -45,6 +45,7 @@ app.use((req, res, next) => {
     res.locals.loggedIn = true;
     res.locals.userId = tokenData.userId;
     res.locals.username = tokenData.username;
+    res.locals.displayname = tokenData.displayname;
     res.locals.bio = tokenData.bio;
     res.locals.city = tokenData.city;
     res.locals.following_count = tokenData.following_count;
@@ -90,9 +91,11 @@ app.post("/login", async (req, res) => {
       const following_count = user.follows.length;
       const followers_count = user.followers.length;
       const posts_count = user.posts.length;
+      const displayname = user.displayname;
       const userData = {
         userId: user._id,
         username,
+        displayname,
         bio,
         city,
         following_count,
