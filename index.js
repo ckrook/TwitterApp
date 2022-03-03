@@ -110,6 +110,10 @@ app.post("/login", async (req, res) => {
   });
 });
 
+app.get("/login", (req, res) => {
+  res.render("login-module");
+});
+
 //Sign up
 app.post("/sign-up", async (req, res, next) => {
   const { username, password, confirmPassword, email } = req.body;
@@ -156,8 +160,45 @@ app.post("/sign-up", async (req, res, next) => {
 
 //Sign up step 2
 app.post("/sign-up-extra", (req, res) => {
-  //Update the newUser
+
+  async function completeProfile() {
+
+  //Hitta senaste sparade ID:t
+  const dbUser = await UsersModel.find().sort({ _id: -1 }).limit(1)[0];
+      
+    try {
+
+      //Skapar ny variabel att spara den uppdaterade användaren i
+      const updatedUser = new UsersModel({
+      username: username,
+      displayname: displayname, 
+      hashedPassword: hashedPassword,
+      email: email,
+      city: req.body.city,
+      dateOfBirth: req.body.dateOfBirth,
+      created: created,
+      role: "User",
+      bio: req.body.bio,
+      website: req.body.website,
+      profilePicture: req.body.profilePicture,
+      posts: req.body.posts,
+      likedPosts: req.body.likedPosts
+    });
+
+      dbUser === updatedUser;
+    //Sparar den nya variabeln och skickar in den i vår kollektion
+      await updatedUser.save();
+
+      // await UsersModel.updateOne(updatedUser);
+      
+      res.redirect("/login")
+    } catch (err) {
+      return res.status(400).send("Something went wrong, unable to complete profile");
+    }
+  }
 });
+
+
 
 app.get("/sign-up", (req, res) => {
   res.render("signup");
