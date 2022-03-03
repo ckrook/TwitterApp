@@ -154,9 +154,33 @@ app.post("/sign-up", async (req, res, next) => {
     // if (password !== confirmPassword) {
     //   return res.status(400).send("Passwords don't match");
     //  }
-
     await newUser.save();
+
+    //Testar redirecta till del två
     res.redirect("/sign-up-extra");
+
+    //Skapar ny användare i del två
+    const updatedUser = new UsersModel({
+        username: req.body.username,
+        displayname: req.body.displayname,
+        hashedPassword: utils.hashedPassword(password),
+        email: req.body.email,
+        city: req.body.city,
+        phonenumber: req.body.phonenumber,
+        dateOfBirth: req.body.dateOfBirth,
+        created: req.body.created,
+        role: "User",
+        bio: req.body.bio,
+        website: req.body.website,
+        profilePicture: req.body.profilePicture,
+        posts: req.body.posts,
+        likedPosts: req.body.likedPosts,
+      });
+      //Sparar den nya variabeln och skickar in den i vår kollektion
+      await updatedUser.save();
+      updatedUser == newUser;
+      newUser.save();
+      // await newUser.delete();
 
   } catch (err) {
     console.log(err);
@@ -167,34 +191,33 @@ app.post("/sign-up", async (req, res, next) => {
 });
 
 //Sign up step 2
-app.post("/sign-up-extra", (req, res) => {
-
-const updatedUser = UsersModel.findOneAndUpdate({ _id: id}).sort({_id: -1}.limit(1)[0], 
-{$set: 
-  { 
-  username: req.body.username,
-  displayname: req.body.displayname,
-  hashedPassword: hashedPassword,
-  email: req.body.email,
-  city: req.body.city,
-  phonenumber: req.body.phonenumber,
-  dateOfBirth: req.body.dateOfBirth,
-  created: req.body.created,
-  role: "User",
-  bio: req.body.bio,
-  website: req.body.website,
-  profilePicture: req.body.profilePicture,
-  posts: [],
-  likedPosts: [],
-  new: true
-  }}).exec(function(err, theUser) {
-  if (err) {
-      console.log("Something wrong when updating data!");
-  }
-  console.log(theUser);
-  await updatedUser.save();
-  res.redirect("/");
-});
+app.put("/sign-up-extra", (req, res) => {
+  
+// const updatedUser = UsersModel.findOneAndUpdate({}).sort({_id: -1}.limit(1)[0], 
+// {$set: 
+//   { 
+//   username: req.body.username,
+//   displayname: req.body.displayname,
+//   hashedPassword: hashedPassword,
+//   email: req.body.email,
+//   city: req.body.city,
+//   phonenumber: req.body.phonenumber,
+//   dateOfBirth: req.body.dateOfBirth,
+//   created: req.body.created,
+//   role: "User",
+//   bio: req.body.bio,
+//   website: req.body.website,
+//   profilePicture: req.body.profilePicture,
+//   posts: [],
+//   likedPosts: [],
+//   new: true
+//   }}).exec(function(err, theUser) {
+//   if (err) {
+//       console.log("Something wrong when updating data!");
+//   }
+//   console.log(theUser);
+//   res.redirect("/");
+// });
 
 
     // //Hitta senaste sparade ID:t
