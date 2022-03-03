@@ -110,7 +110,7 @@ app.post("/login", async (req, res) => {
   });
 });
 
-app.get("/login", (req, res) => {
+app.get("/", (req, res) => {
   res.render("login-module");
 });
 
@@ -121,6 +121,7 @@ app.post("/sign-up", async (req, res, next) => {
   try {
     const newUser = new UsersModel({
       username: req.body.username,
+      displayname: req.body.displayname,
       hashedPassword: utils.hashedPassword(password),
       email: req.body.email,
       city: req.body.city,
@@ -128,6 +129,7 @@ app.post("/sign-up", async (req, res, next) => {
       created: Date.now(),
       role: "User",
       bio: req.body.bio,
+      website: req.body.website,
       profilePicture: req.body.profilePicture,
       posts: req.body.posts,
       likedPosts: req.body.likedPosts,
@@ -135,13 +137,15 @@ app.post("/sign-up", async (req, res, next) => {
 
     UsersModel.findOne({ username }, async (err, user) => {
       if (user) {
-        return res.status(400).send("Username is already taken");
+        // return res.status(400).send("Username is already taken");
+        console.log("Username taken");
       }
     });
 
     UsersModel.findOne({ email }, async (err, user) => {
       if (email == username.email) {
-        return res.status(400).send("Email is already in use");
+        // return res.status(400).send("Email is already in use");
+        console.log("Email taken");
       }
     });
 
