@@ -10,7 +10,7 @@ router.get("/", (req, res) => {
   res.render("start");
 });
 
-router.get("/single/:id", followthem ,  async (req, res) => {
+router.get("/single/:id", followthem, async (req, res) => {
   const post = await PostsModel.findById(req.params.id).lean();
 
   let followthem = req.followthem;
@@ -22,6 +22,7 @@ router.post("/new", async (req, res) => {
   const userId = res.locals.userId;
   const username = res.locals.username;
   const displayname = res.locals.displayname;
+  console.log(userId, username);
   const { content } = req.body;
 
   if (!content || !content.trim()) {

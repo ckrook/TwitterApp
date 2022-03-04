@@ -70,15 +70,16 @@ router.post("/edit/:id", async (req, res) => {
   const id = req.params.id;
   const { displayname, username, email, bio, city, website } = req.body;
   if (res.locals.userId === id) {
+    const dbUser = await UsersModel.findOne({ _id: id });
+    dbUser.displayname = displayname;
+    dbUser.username = username;
+    dbUser.email = email;
+    dbUser.bio = bio;
+    dbUser.city = city;
+    dbUser.website = website;
+    await dbUser.save();
     const profile = await UsersModel.findOne({ _id: id }).lean();
-    profile.displayname = displayname;
-    profile.username = username;
-    profile.email = email;
-    profile.bio = bio;
-    profile.city = city;
-    profile.website = website;
-    await profile.save();
-    res.render("user-profile", profile);
+    res.render("user-profile", { profile });
   }
 });
 
