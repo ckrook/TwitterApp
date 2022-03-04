@@ -35,7 +35,6 @@ router.post("/new", async (req, res) => {
       author_displayname: displayname,
       content: content,
     });
-    const user = await UsersModel.findOne({ userId });
 
     await newPost.save();
 
