@@ -53,15 +53,33 @@ router.get("/:id", followthem, async (req, res) => {
 router.post("/follow", async (req, res) => {
   const userId = res.locals.userId;
   const id = req.query.id;
-  console.log(id);
-  console.log(userId);
   const mainUser = await UsersModel.findOne({ userId });
-  console.log(mainUser);
+
   res.redirect("/");
 });
 
-router.put("/edit", (req, res) => {
-  res.render("edit-profile");
+router.get("/edit/:id", async (req, res) => {
+  const id = req.params.id;
+  if (res.locals.userId === id) {
+    const user = await UsersModel.findOne({ _id: id }).lean();
+    res.render("profile-edit", { user });
+  }
+});
+
+router.post("/edit/:id", async (req, res) => {
+  const id = req.params.id;
+  const { displayname, username, email, bio, city, website } = req.body;
+  if (res.locals.userId === id) {
+    const profile = await UsersModel.findOne({ _id: id }).lean();
+    profile.displayname = displayname;
+    profile.username = username;
+    profile.email = email;
+    profile.bio = bio;
+    profile.city = city;
+    profile.website = website;
+    await profile.save();
+    res.render("user-profile", profile);
+  }
 });
 
 router.delete("/delete", (req, res) => {
