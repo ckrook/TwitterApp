@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const PostsModel = require("../models/PostsModel.js");
-const UsersModel = require("../models/UsersModel");
 
 const { forceAuthorize, followthem, sortPosts } = require("../middleware.js");
 
@@ -10,7 +9,7 @@ router.get("/", (req, res) => {
   res.render("start");
 });
 
-router.get("/single/:id", followthem ,  async (req, res) => {
+router.get("/single/:id", followthem, sortPosts,  async (req, res) => {
   const post = await PostsModel.findById(req.params.id)
     .populate("comments")
     .lean();
