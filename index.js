@@ -1,6 +1,7 @@
 require("dotenv").config();
 require("./mongoose.js");
 
+const mongoose = require("mongoose");
 const express = require("express");
 const exphbs = require("express-handlebars");
 const jwt = require("jsonwebtoken");
@@ -46,8 +47,13 @@ app.use((req, res, next) => {
     res.locals.userId = tokenData.userId;
     res.locals.username = tokenData.username;
     res.locals.displayname = tokenData.displayname;
+    res.locals.hashedPassword = tokenData.hashedPassword;
     res.locals.bio = tokenData.bio;
     res.locals.city = tokenData.city;
+    res.locals.created = tokenData.created;
+    res.locals.phonenumber = tokenData.phonenumber,
+    res.locals.dateOfBirth = tokenData.dateOfBirth,
+    res.locals.website = tokenData.website,
     res.locals.following_count = tokenData.following_count;
     res.locals.followers_count = tokenData.followers_count;
     res.locals.posts_count = tokenData.posts_count;
@@ -59,6 +65,8 @@ app.use((req, res, next) => {
 });
 
 const { forceAuthorize, followthem, sortPosts } = require("./middleware");
+const { json } = require("express/lib/response");
+const { token } = require("morgan");
 
 //////////////////////
 // MIDDLEWARES ENDS//
@@ -117,153 +125,82 @@ app.get("/", (req, res) => {
   res.render("login-module");
 });
 
-//Sign up
-app.post("/sign-up", async (req, res, next) => {
-  const { username, password, confirmPassword, email } = req.body;
-
-  try {
-    const newUser = new UsersModel({
-      username: req.body.username,
-      displayname: req.body.displayname,
-      hashedPassword: utils.hashedPassword(password),
-      email: req.body.email,
-      city: req.body.city,
-      phonenumber: req.body.phonenumber,
-      dateOfBirth: req.body.dateOfBirth,
-      created: Date.now(),
-      role: "User",
-      bio: req.body.bio,
-      website: req.body.website,
-      profilePicture: req.body.profilePicture,
-      posts: req.body.posts,
-      likedPosts: req.body.likedPosts,
-    });
-
-    UsersModel.findOne({ username }, async (err, user) => {
-      if (user) {
-        // return res.status(400).send("Username is already taken");
-        console.log("Username taken");
-      }
-    });
-
-    UsersModel.findOne({ email }, async (err, user) => {
-      if (email == username.email) {
-        // return res.status(400).send("Email is already in use");
-        console.log("Email taken");
-      }
-    });
-
-    //Password comparison - fix later
-    // if (password !== confirmPassword) {
-    //   return res.status(400).send("Passwords don't match");
-    //  }
-    await newUser.save();
-
-    //Testar redirecta till del två
-    res.redirect("/sign-up-extra");
-
-    //Skapar ny användare i del två
-    const updatedUser = new UsersModel({
-        username: req.body.username,
-        displayname: req.body.displayname,
-        hashedPassword: utils.hashedPassword(password),
-        email: req.body.email,
-        city: req.body.city,
-        phonenumber: req.body.phonenumber,
-        dateOfBirth: req.body.dateOfBirth,
-        created: req.body.created,
-        role: "User",
-        bio: req.body.bio,
-        website: req.body.website,
-        profilePicture: req.body.profilePicture,
-        posts: req.body.posts,
-        likedPosts: req.body.likedPosts,
-      });
-      //Sparar den nya variabeln och skickar in den i vår kollektion
-      await updatedUser.save();
-      updatedUser == newUser;
-      newUser.save();
-      // await newUser.delete();
-
-  } catch (err) {
-    console.log(err);
-    // return res.status(400).send("Something went wrong");
-    console.log("Something went wrong");
-    res.redirect("/");
-  }
-});
-
-//Sign up step 2
-app.put("/sign-up-extra", (req, res) => {
-  
-// const updatedUser = UsersModel.findOneAndUpdate({}).sort({_id: -1}.limit(1)[0], 
-// {$set: 
-//   { 
-//   username: req.body.username,
-//   displayname: req.body.displayname,
-//   hashedPassword: hashedPassword,
-//   email: req.body.email,
-//   city: req.body.city,
-//   phonenumber: req.body.phonenumber,
-//   dateOfBirth: req.body.dateOfBirth,
-//   created: req.body.created,
-//   role: "User",
-//   bio: req.body.bio,
-//   website: req.body.website,
-//   profilePicture: req.body.profilePicture,
-//   posts: [],
-//   likedPosts: [],
-//   new: true
-//   }}).exec(function(err, theUser) {
-//   if (err) {
-//       console.log("Something wrong when updating data!");
-//   }
-//   console.log(theUser);
-//   res.redirect("/");
-// });
-
-
-    // //Hitta senaste sparade ID:t
-    // const dbUser = UsersModel.findOneAndUpdate({}).sort({ _id: -1 }).limit(1)[0];
-
-    // try {
-    //   //Skapar ny variabel att spara den uppdaterade användaren i
-    //   const updatedUser = new UsersModel({
-    //     username: req.body.username,
-    //     displayname: req.body.displayname,
-    //     hashedPassword: utils.hashedPassword(password),
-    //     email: req.body.email,
-    //     city: req.body.city,
-    //     phonenumber: req.body.phonenumber,
-    //     dateOfBirth: req.body.dateOfBirth,
-    //     created: req.body.created,
-    //     role: "User",
-    //     bio: req.body.bio,
-    //     website: req.body.website,
-    //     profilePicture: req.body.profilePicture,
-    //     posts: req.body.posts,
-    //     likedPosts: req.body.likedPosts,
-    //   });
-    //   //Sparar den nya variabeln och skickar in den i vår kollektion
-    //   await updatedUser.save();
-
-    //   // await UsersModel.updateOne(updatedUser);
-
-    //   res.redirect("/");
-    // } catch (err) {
-    //   // return res
-    //   //   .status(400)
-    //   //   .send("Something went wrong, unable to complete profile");
-    //   console.log("Something went wrong");
-    // }
-});
-
 app.get("/sign-up", (req, res) => {
   res.render("signup");
 });
 
-app.get("/sign-up-extra", (req, res) => {
+app.get("/sign-up-extra", async (req, res) => { 
   res.render("signup-step-2");
+});
+
+app.post("/sign-up", async (req, res, next) => {
+
+  const { username, password, confirmPassword, email } = req.body;
+
+    const newUser = new UsersModel({
+      _id: new mongoose.Types.ObjectId(),
+      username: req.body.username,
+      displayname: req.body.displayname,
+      hashedPassword: utils.hashedPassword(password),
+      email: req.body.email,
+      created: Date.now(),
+      role: "User",
+    });
+
+    const userToken = jwt.sign(newUser.toJSON(), process.env.JWTSECRET);
+    res.cookie("token", userToken);
+
+    await newUser.save();
+
+    UsersModel.find({ username, email, password }, async (err, user, emailadress, password) => {
+      if (user == username) {
+        res.status(200).send("Username taken");
+      }  
+      if (emailadress) {
+        res.status(200).send("Email already in use");
+      }
+      if (password !== confirmPassword)
+      {
+        res.status(200).send("Passwords don't match");
+      }
+      else {
+        console.log(err);
+      }
+    });
+    res.redirect("/sign-up-extra");
+  });
+
+
+app.post("/sign-up-extra", async (req, res) => {
+
+  const userData = req.cookies.userToken;
+    
+  UsersModel.findOne({ _id: userData.id }, async (err, user) => {
+
+    if (user) {
+      
+      const updatedUser = new UsersModel({
+        _id: userData.id,
+        username: userData.username,
+        displayname: userData.displayname,
+        hashedpassword: userData.hashedPassword,
+        email: userData.email,
+        created: userData.created,
+        role: userData.role,
+        city: req.body.city,
+        phonenumber: req.body.phonenumber,
+        dateOfBirth: req.body.dateOfBirth,
+        bio: req.body.bio,
+        website: req.body.website,
+      });
+      
+      await updatedUser.save();  
+    }
+    else {
+      console.log(err);
+      res.redirect("/home");
+    }
+  });
 });
 
 app.get("/secret2", forceAuthorize, (req, res) => {
