@@ -11,7 +11,9 @@ router.get("/", (req, res) => {
 });
 
 router.get("/single/:id", followthem ,  async (req, res) => {
-  const post = await PostsModel.findById(req.params.id).lean();
+  const post = await PostsModel.findById(req.params.id)
+    .populate("comments")
+    .lean();
 
   let followthem = req.followthem;
 

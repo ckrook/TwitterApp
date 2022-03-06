@@ -128,7 +128,8 @@
     </div>
   </div>
   <div class="flex p-10 gap-10 border-b border-r border-gray-200">
-  {{!Submit a post }}
+{{!Post ends }}
+{{!Submit a post }}
   <div class="avatar">
     <img
       class="rounded-full w-20"
@@ -139,7 +140,7 @@
   <div class="w-full">
     <form
       class="mb-0"
-      action="/post/new"
+      action="/comment/new/{{post._id}}"
       method="post"
     >
       <textarea
@@ -148,7 +149,7 @@
         id=""
         cols="30"
         rows="4"
-        placeholder="Whats on your mind?"
+        placeholder="Type your answer"
       ></textarea>
       <div class="flex justify-end">
       <div class="text-sm text-red-500 w-full">
@@ -163,5 +164,5 @@
       </div>
     </form>
   </div>
-</div>{{!Submit a post ends }}
-{{!Post ends }}
+</div>
+{{!Submit a post ends }}

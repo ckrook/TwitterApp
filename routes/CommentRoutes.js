@@ -12,9 +12,27 @@ router.get("/single", (req, res) => {
     res.redirect("single-comment");
 });
 
-router.post("/new", async (req, res) => {
+router.post("/new/:id", async (req, res) => {
+  const postId = req.params.id;
 
-  res.redirect("new-comment");
+  const newComment = new CommentsModel({
+    content: req.body.content,
+    author_id: res.locals.userId,
+    author_name: res.locals.username,
+    author_displayname: res.locals.displayname,
+    post_id: postId
+  });
+
+  await newComment.save();
+
+  // Find main post
+  let mainPost = await PostsModel.findOne({ _id: postId });
+
+  mainPost.comments.push(newComment._id);
+
+  await mainPost.save();
+
+  res.redirect("/post/single/" + postId);
 });
 
 router.put("/edit", (req, res) => {
