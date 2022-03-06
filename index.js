@@ -5,7 +5,7 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-
+const fileupload = require("express-fileupload");
 const UsersModel = require("./models/UsersModel.js");
 const utils = require("./utils.js");
 const userRoutes = require("./routes/UserRoutes.js");
@@ -32,7 +32,9 @@ app.engine(
 
 app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 app.use(cookieParser());
+app.use(fileupload());
 
 //////////////////
 // MIDDLEWARES //
@@ -67,8 +69,10 @@ const { forceAuthorize, followthem, sortPosts } = require("./middleware");
 app.get("/", sortPosts, followthem, async (req, res) => {
   let posts = req.sortPosts;
   let followthem = req.followthem;
+  let id = res.locals.userId;
+  const profile = await UsersModel.findOne({ _id: id }).lean();
 
-  res.render("home", { posts, followthem });
+  res.render("home", { posts, followthem, profile });
 });
 
 // ROUTES

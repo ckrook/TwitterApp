@@ -31,8 +31,15 @@ function timeAgo(input) {
   }
 }
 
+function getUniqueFilename(filename) {
+  const timestamp = Date.now();
+  const extension = filename.split(".").pop();
+  return `${timestamp}.${extension}`;
+}
+
 module.exports = {
   hashedPassword,
   comparePassword,
   timeAgo,
+  getUniqueFilename,
 };

@@ -1,9 +1,9 @@
 const express = require("express");
 const UsersModel = require("../models/UsersModel.js");
 const router = express.Router();
+
 const mongoose = require("mongoose");
-const { ObjectId } = require("mongodb");
-const { timeAgo } = require("./../utils");
+const { timeAgo, getUniqueFilename } = require("./../utils");
 //LOG IN
 router.get("/", (req, res) => {
   res.render("signup");
@@ -66,8 +66,44 @@ router.get("/edit/:id", async (req, res) => {
   }
 });
 
-router.post("/edit/:id", async (req, res) => {
+router.post("/edit/:id", followthem, async (req, res) => {
+  let edit = false;
   const id = req.params.id;
+  if (id === res.locals.userId) {
+    edit = true;
+  }
+  let followthem = req.followthem;
+  let coverimage = "";
+  let coverimagefilename = "";
+  let coverimageuploadPath = "";
+  let image = "";
+  let filename = "";
+  let uploadPath = "";
+  if (req.files && req.files.image) {
+    image = req.files.image;
+    filename = getUniqueFilename(image.name);
+    uploadPath =
+      "/Users/charleskrook/Documents/twitter-clone" +
+      "/public/uploads/" +
+      filename;
+    await image.mv(uploadPath);
+    const dbUser = await UsersModel.findOne({ _id: id });
+    dbUser.profilePicture = "/uploads/" + filename;
+    await dbUser.save();
+  }
+  if (req.files && req.files.coverimage) {
+    coverimage = req.files.coverimage;
+    coverimagefilename = getUniqueFilename(coverimage.name);
+    coverimageuploadPath =
+      "/Users/charleskrook/Documents/twitter-clone" +
+      "/public/uploads/" +
+      coverimagefilename;
+    await coverimage.mv(coverimageuploadPath);
+    const dbUser = await UsersModel.findOne({ _id: id });
+    dbUser.coverimage = "/uploads/" + coverimagefilename;
+    await dbUser.save();
+  }
+
   const { displayname, username, email, bio, city, website } = req.body;
   if (res.locals.userId === id) {
     const dbUser = await UsersModel.findOne({ _id: id });
@@ -79,7 +115,7 @@ router.post("/edit/:id", async (req, res) => {
     dbUser.website = website;
     await dbUser.save();
     const profile = await UsersModel.findOne({ _id: id }).lean();
-    res.render("user-profile", { profile });
+    res.render("user-profile", { profile, followthem, edit });
   }
 });
 
