@@ -184,7 +184,7 @@ app.post("/sign-up-extra", async (req, res) => {
   dbUser.bio = bio;
 
   await dbUser.save();
-
+  console.log("Success");
   res.redirect("/");
 });
 
