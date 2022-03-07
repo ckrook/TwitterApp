@@ -1,6 +1,6 @@
-# twitter-clone
+# Twitter App
 
-Soon a live link to the project will appear here.
+This project is currently under development and will soon be deployed on a live server.
 
 ## Summary
 This is part of a school group project where our objective is to create a Twitter-like app where users can create posts, comment and like other posts / comments.
