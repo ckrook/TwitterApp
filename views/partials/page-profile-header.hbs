@@ -25,27 +25,26 @@
     </div>
   </div>
 </div>
-<main class="relative -z-10">
+<main class="relative">
   <div>
-    <img
-      class="w-full"
-      src="https://via.placeholder.com/850x300"
-      alt="Cover image"
-    />
+    <img class="w-full" src="{{profile.coverimage}}" alt="Cover image" />
   </div>
   <div
     class="relative z-30 h-[300px] flex-col p-5 border-r border-b border-gray-200"
   >
     {{#if edit}}
-      <a
-        onclick="editmodal()"
-        class="absolute bottom-10 right-5 border border-gray-200 p-3 rounded-full"
-      >Edit profile</a>
+      <form class="mb-0" action="/user/edit/{{profile._id}}" method="get">
+        <input
+          type="submit"
+          value="Edit Profile"
+          class="absolute bottom-10 right-5 border border-gray-200 p-3 rounded-full z-50"
+        />
+      </form>
     {{/if}}
     <div class="relative top-[-60px] sm:top-[-85px] xl:top-[-80px]">
       <img
         class="w-20 h-20 md:w-32 md:h-32 lg:w-32 lg:h-32 xl:w-42 xl:h-42 border-4 border-white rounded-full mb-6"
-        src="https://avatars.githubusercontent.com/u/5972004?v=4?s=400"
+        src="{{profile.profilePicture}}"
         alt=""
       />
 

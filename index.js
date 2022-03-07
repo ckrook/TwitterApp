@@ -5,7 +5,7 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-
+const fileupload = require("express-fileupload");
 const UsersModel = require("./models/UsersModel.js");
 const utils = require("./utils.js");
 const userRoutes = require("./routes/UserRoutes.js");
@@ -32,7 +32,9 @@ app.engine(
 
 app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 app.use(cookieParser());
+app.use(fileupload());
 
 //////////////////
 // MIDDLEWARES //
@@ -67,8 +69,10 @@ const { forceAuthorize, followthem, sortPosts } = require("./middleware");
 app.get("/", sortPosts, followthem, async (req, res) => {
   let posts = req.sortPosts;
   let followthem = req.followthem;
+  let id = res.locals.userId;
+  const profile = await UsersModel.findOne({ _id: id }).lean();
 
-  res.render("home", { posts, followthem });
+  res.render("home", { posts, followthem, profile });
 });
 
 // ROUTES
@@ -164,27 +168,26 @@ app.post("/sign-up", async (req, res, next) => {
 
     //Skapar ny användare i del två
     const updatedUser = new UsersModel({
-        username: req.body.username,
-        displayname: req.body.displayname,
-        hashedPassword: utils.hashedPassword(password),
-        email: req.body.email,
-        city: req.body.city,
-        phonenumber: req.body.phonenumber,
-        dateOfBirth: req.body.dateOfBirth,
-        created: req.body.created,
-        role: "User",
-        bio: req.body.bio,
-        website: req.body.website,
-        profilePicture: req.body.profilePicture,
-        posts: req.body.posts,
-        likedPosts: req.body.likedPosts,
-      });
-      //Sparar den nya variabeln och skickar in den i vår kollektion
-      await updatedUser.save();
-      updatedUser == newUser;
-      newUser.save();
-      // await newUser.delete();
-
+      username: req.body.username,
+      displayname: req.body.displayname,
+      hashedPassword: utils.hashedPassword(password),
+      email: req.body.email,
+      city: req.body.city,
+      phonenumber: req.body.phonenumber,
+      dateOfBirth: req.body.dateOfBirth,
+      created: req.body.created,
+      role: "User",
+      bio: req.body.bio,
+      website: req.body.website,
+      profilePicture: req.body.profilePicture,
+      posts: req.body.posts,
+      likedPosts: req.body.likedPosts,
+    });
+    //Sparar den nya variabeln och skickar in den i vår kollektion
+    await updatedUser.save();
+    updatedUser == newUser;
+    newUser.save();
+    // await newUser.delete();
   } catch (err) {
     console.log(err);
     // return res.status(400).send("Something went wrong");
@@ -195,67 +198,61 @@ app.post("/sign-up", async (req, res, next) => {
 
 //Sign up step 2
 app.put("/sign-up-extra", (req, res) => {
-  
-// const updatedUser = UsersModel.findOneAndUpdate({}).sort({_id: -1}.limit(1)[0], 
-// {$set: 
-//   { 
-//   username: req.body.username,
-//   displayname: req.body.displayname,
-//   hashedPassword: hashedPassword,
-//   email: req.body.email,
-//   city: req.body.city,
-//   phonenumber: req.body.phonenumber,
-//   dateOfBirth: req.body.dateOfBirth,
-//   created: req.body.created,
-//   role: "User",
-//   bio: req.body.bio,
-//   website: req.body.website,
-//   profilePicture: req.body.profilePicture,
-//   posts: [],
-//   likedPosts: [],
-//   new: true
-//   }}).exec(function(err, theUser) {
-//   if (err) {
-//       console.log("Something wrong when updating data!");
-//   }
-//   console.log(theUser);
-//   res.redirect("/");
-// });
-
-
-    // //Hitta senaste sparade ID:t
-    // const dbUser = UsersModel.findOneAndUpdate({}).sort({ _id: -1 }).limit(1)[0];
-
-    // try {
-    //   //Skapar ny variabel att spara den uppdaterade användaren i
-    //   const updatedUser = new UsersModel({
-    //     username: req.body.username,
-    //     displayname: req.body.displayname,
-    //     hashedPassword: utils.hashedPassword(password),
-    //     email: req.body.email,
-    //     city: req.body.city,
-    //     phonenumber: req.body.phonenumber,
-    //     dateOfBirth: req.body.dateOfBirth,
-    //     created: req.body.created,
-    //     role: "User",
-    //     bio: req.body.bio,
-    //     website: req.body.website,
-    //     profilePicture: req.body.profilePicture,
-    //     posts: req.body.posts,
-    //     likedPosts: req.body.likedPosts,
-    //   });
-    //   //Sparar den nya variabeln och skickar in den i vår kollektion
-    //   await updatedUser.save();
-
-    //   // await UsersModel.updateOne(updatedUser);
-
-    //   res.redirect("/");
-    // } catch (err) {
-    //   // return res
-    //   //   .status(400)
-    //   //   .send("Something went wrong, unable to complete profile");
-    //   console.log("Something went wrong");
-    // }
+  // const updatedUser = UsersModel.findOneAndUpdate({}).sort({_id: -1}.limit(1)[0],
+  // {$set:
+  //   {
+  //   username: req.body.username,
+  //   displayname: req.body.displayname,
+  //   hashedPassword: hashedPassword,
+  //   email: req.body.email,
+  //   city: req.body.city,
+  //   phonenumber: req.body.phonenumber,
+  //   dateOfBirth: req.body.dateOfBirth,
+  //   created: req.body.created,
+  //   role: "User",
+  //   bio: req.body.bio,
+  //   website: req.body.website,
+  //   profilePicture: req.body.profilePicture,
+  //   posts: [],
+  //   likedPosts: [],
+  //   new: true
+  //   }}).exec(function(err, theUser) {
+  //   if (err) {
+  //       console.log("Something wrong when updating data!");
+  //   }
+  //   console.log(theUser);
+  //   res.redirect("/");
+  // });
+  // //Hitta senaste sparade ID:t
+  // const dbUser = UsersModel.findOneAndUpdate({}).sort({ _id: -1 }).limit(1)[0];
+  // try {
+  //   //Skapar ny variabel att spara den uppdaterade användaren i
+  //   const updatedUser = new UsersModel({
+  //     username: req.body.username,
+  //     displayname: req.body.displayname,
+  //     hashedPassword: utils.hashedPassword(password),
+  //     email: req.body.email,
+  //     city: req.body.city,
+  //     phonenumber: req.body.phonenumber,
+  //     dateOfBirth: req.body.dateOfBirth,
+  //     created: req.body.created,
+  //     role: "User",
+  //     bio: req.body.bio,
+  //     website: req.body.website,
+  //     profilePicture: req.body.profilePicture,
+  //     posts: req.body.posts,
+  //     likedPosts: req.body.likedPosts,
+  //   });
+  //   //Sparar den nya variabeln och skickar in den i vår kollektion
+  //   await updatedUser.save();
+  //   // await UsersModel.updateOne(updatedUser);
+  //   res.redirect("/");
+  // } catch (err) {
+  //   // return res
+  //   //   .status(400)
+  //   //   .send("Something went wrong, unable to complete profile");
+  //   console.log("Something went wrong");
+  // }
 });
 
 app.get("/sign-up", (req, res) => {

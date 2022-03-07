@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const PostsModel = require("../models/PostsModel.js");
-const UsersModel = require("../models/UsersModel");
 
 const { forceAuthorize, followthem, sortPosts } = require("../middleware.js");
 
@@ -10,8 +9,10 @@ router.get("/", (req, res) => {
   res.render("start");
 });
 
-router.get("/single/:id", followthem ,  async (req, res) => {
-  const post = await PostsModel.findById(req.params.id).lean();
+router.get("/single/:id", followthem, sortPosts,  async (req, res) => {
+  const post = await PostsModel.findById(req.params.id)
+    .populate("comments")
+    .lean();
 
   let followthem = req.followthem;
 
@@ -22,6 +23,7 @@ router.post("/new", async (req, res) => {
   const userId = res.locals.userId;
   const username = res.locals.username;
   const displayname = res.locals.displayname;
+  console.log(userId, username);
   const { content } = req.body;
 
   if (!content || !content.trim()) {
@@ -35,7 +37,6 @@ router.post("/new", async (req, res) => {
       author_displayname: displayname,
       content: content,
     });
-    const user = await UsersModel.findOne({ userId });
 
     await newPost.save();
 

@@ -40,6 +40,8 @@ const followthem = async (req, res, next) => {
       }
     }
   }
+  toFollow = toFollow.slice(0, 5);
+
   req.followthem = toFollow;
   next();
 };

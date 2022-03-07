@@ -1,18 +1,10 @@
-<div class="flex p-10 gap-10 border-b border-r border-gray-200">
+<div class="flex p-10 gap-10 border-b">
   {{!Submit a post }}
   <div class="avatar">
-    <img
-      class="rounded-full w-20"
-      src="https://via.placeholder.com/150"
-      alt=""
-    />
+    <img class="rounded-full w-20" src="{{profile.profilePicture}}" alt="" />
   </div>
   <div class="w-full">
-    <form
-      class="mb-0"
-      action="/post/new"
-      method="post"
-    >
+    <form class="mb-0" action="/post/new" method="post">
       <textarea
         class="w-full mb-5 resize-none border-b-2 border-gray-200"
         name="content"
@@ -22,9 +14,9 @@
         placeholder="Whats on your mind?"
       ></textarea>
       <div class="flex justify-end">
-      <div class="text-sm text-red-500 w-full">
-        {{error}}
-      </div>
+        <div class="text-sm text-red-500 w-full">
+          {{error}}
+        </div>
         <input
           value="Send"
           type="submit"

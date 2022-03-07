@@ -13,6 +13,7 @@ const usersSchema = new mongoose.Schema({
   bio: { type: String, default: "" },
   website: { type: String },
   profilePicture: String,
+  coverimage: String,
   posts: [
     {
       type: String,
