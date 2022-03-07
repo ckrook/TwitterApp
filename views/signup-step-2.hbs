@@ -35,7 +35,7 @@
                 class="w-full p-3 text-sm border-gray-200 rounded-lg"
                 placeholder="+000 000 00 00"
                 type="tel"
-                id="phonenumber" name="phonenumber"
+                id="phone" name="phonenumber"
               />
             </div>
           </div>
@@ -90,13 +90,6 @@
       <div>
 
         <label for="profile-picture" class="text-sm font-medium">Profile picture</label>
-        
-        {{!-- <form method="POST" enctype="multipart/form-data" action="/upload">
-          <input type="file" name="file" id="profile-picture" name="profile-picture"
-            class="w-full p-4 pr-12 my-5 text-sm border-gray-200 rounded-lg shadow-sm"
-            placeholder="Choose file"
-          />
-      </form> --}}
 
           <span class="absolute inset-y-0 inline-flex items-center right-4">
             <svg
@@ -106,7 +99,7 @@
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
+              <pat
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
@@ -125,11 +118,9 @@
       </button>
       </div>
     </form>
-    
-    {{!-- <p class="text-sm text-center text-gray-500"> --}}
-      {{!-- <form action="/home" method="GET">
+      <form action="/" method="get">
         <button class="underline my-5" href="/">Lets do this later..</button>
-      </form> --}}
+      </form>
     </div>
     </p>
   </div>
