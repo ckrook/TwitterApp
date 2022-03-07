@@ -1,37 +1,31 @@
 # twitter-clone
 
+Soon a live link to the project will appear here.
+
 ## Summary
 This is part of a school group project where our objective is to create a Twitter-like app where users can create posts, comment and like other posts / comments.
 
-## Collections
-| Users  |   | |
-| ------------- | ------------- | ------------- | 
-| Property  | Type  | Required  | Other  |
-| _id  | ObjectId  | Yes  |  
-| Username  | String  | Yes  |  
-| Email  | String  | Yes  |  
-| Password  | String  | Yes  |  
-| Admin  | Boolean  | Yes  | 
-| Bio  | String  | No  |  
-| Profile_picture  | String  | No  |  
-| Created  | Int  | Yes  |  
-| Posts  | String []  | Yes  |  
-| Liked  | String []  | Yes  |  
+## Objectives
+Come up with an idea for a platform or web application with your group. The application can be almost anything, but you need to meet the following requirements
 
-| Posts  |   | | 
-| ------------- | ------------- | ------------- | 
-| Property  | Type  | Required  | Other  |
-| _id  | ObjectId  | Yes  |  
-| Content  | String  | Yes  |  
-| Created  | Int  | Yes  |  
-| Like_count  | Int  | Yes  |  
-| Retweet_count  | Int  | Yes  | 
-| Comments  | String []  | Yes  |  
+## The following requirements need to be met
+<ul>
+  <li>Users should be able to create accounts and log in</li>
+  <li>Users can create two different types of resources</li>
+  <li>Users should be able to view other users' resources</li>
+  <li>Users should be able to delete and edit their own resources</li>
+  <li>Data about users and their resources are saved in mongodb</li>
+  <li>All pages and subpages are styled with CSS</li>
+  <li>Input data is validated before it is added to the database</li>
+  <li>Errors that appear (eg 404) are clearly presented to the user</li>
+</ul>
 
-| Comments  |   | | 
-| ------------- | ------------- | ------------- | 
-| Property  | Type  | Required  | Other  |
-| _id  | ObjectId  | Yes  |  
-| Content  | String  | Yes  |  
-| Created  | Int  | Yes  |  
-| Like_count  | Int  | Yes  |  
+## Tools
+
+<ul>
+  <li>NodeJs</li>
+  <li>Express</li>
+  <li>Handlebars</li>
+  <li>Mongoose</li>
+  <li>Passport</li>
+</ul>
