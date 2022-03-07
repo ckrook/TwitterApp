@@ -27,7 +27,12 @@
 </div>
 <main class="relative">
   <div>
-    <img class="w-full" src="{{profile.coverimage}}" alt="Cover image" />
+    <img
+      id="cover"
+      class="w-full"
+      src="{{profile.coverimage}}"
+      alt="Cover image"
+    />
   </div>
   <div
     class="relative z-30 h-[300px] flex-col p-5 border-r border-b border-gray-200"
@@ -37,12 +42,13 @@
         <input
           type="submit"
           value="Edit Profile"
-          class="absolute bottom-10 right-5 border border-gray-200 p-3 rounded-full z-50"
+          class="absolute cursor-pointer hover:bg-gray-50 bottom-10 right-5 border border-gray-200 p-3 rounded-full z-50"
         />
       </form>
     {{/if}}
     <div class="relative top-[-60px] sm:top-[-85px] xl:top-[-80px]">
       <img
+        id="avatar"
         class="w-20 h-20 md:w-32 md:h-32 lg:w-32 lg:h-32 xl:w-42 xl:h-42 border-4 border-white rounded-full mb-6"
         src="{{profile.profilePicture}}"
         alt=""

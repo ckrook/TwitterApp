@@ -148,18 +148,21 @@
         method="post"
       >
         <div class="flex justify-start items-center w-full">
-          <img
-            class="mr-0 sm:mr-2 w-[40px] sm:w-[60px] rounded-full"
-            src="{{profile.profilePicture}}"
-            alt="Charles Krook"
-          />
-          <div class="flex flex-col justify-start w-full hidden sm:block">
-            <b>{{username}}</b>
-            <p class="text-gray-400">@{{username}}</p>
-          </div>
+          <a class="flex justify-start items-center w-full" href="/">
+            <img
+              id="avatar"
+              class="mr-0 sm:mr-2 w-[40px] sm:w-[60px] rounded-full"
+              src="{{profile.profilePicture}}"
+              alt="Charles Krook"
+            />
+            <div class="flex flex-col justify-start w-full hidden sm:block">
+              <b>{{username}}</b>
+              <p class="text-gray-400">@{{username}}</p>
+            </div>
+          </a>
           <div class="flex justify-end">
             <label
-              class="cursor-pointer hover:bg-gray-200 p-5 rounded-full hidden sm:block"
+              class="cursor-pointer hover:bg-gray-200 p-3 rounded-full hidden sm:block"
             >
               <input
                 type="submit"
@@ -170,8 +173,8 @@
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="17"
+                height="17"
                 fill="currentColor"
                 class="bi bi-box-arrow-right"
                 viewBox="0 0 16 16"

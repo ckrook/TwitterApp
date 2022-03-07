@@ -1,7 +1,14 @@
 <div class="flex p-10 gap-10 border-b">
   {{!Submit a post }}
   <div class="avatar">
-    <img class="rounded-full w-20" src="{{profile.profilePicture}}" alt="" />
+    <a href="/">
+      <img
+        id="avatar"
+        class="rounded-full w-20"
+        src="{{profile.profilePicture}}"
+        alt=""
+      />
+    </a>
   </div>
   <div class="w-full">
     <form class="mb-0" action="/post/new" method="post">
