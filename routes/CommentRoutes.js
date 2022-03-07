@@ -5,11 +5,11 @@ const CommentsModel = require("../models/CommentsModel.js");
 const PostsModel = require("../models/PostsModel.js");
 
 router.get("/", (req, res) => {
-    res.render("start");
+  res.render("start");
 });
 
 router.get("/single", (req, res) => {
-    res.redirect("single-comment");
+  res.redirect("single-comment");
 });
 
 router.post("/new/:id", async (req, res) => {
@@ -35,12 +35,19 @@ router.post("/new/:id", async (req, res) => {
   res.redirect("/post/single/" + postId);
 });
 
-router.put("/edit", (req, res) => {
-    res.redirect("edit-comment");
+router.get("/edit", async (req, res) => {
+  const isAuthorized = async () => {
+    const userId = res.locals.userId;
+    const userComments = await CommentsModel.find({ author_id: userId });
+
+    
+  }
+
+  res.render("post-single", {isAuthorized});
 });
 
 router.delete("/delete", (req, res) => {
-    res.redirect("delete-comment");
+  res.redirect("delete-comment");
 });
 
 module.exports = router;

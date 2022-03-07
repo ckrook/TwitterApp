@@ -243,7 +243,8 @@
             ></path>
           </svg>
           <a href="" class="hidden sm:block">{{like_count}}</a>
-        </div></div>
+        </div>
+      </div>
       <div>
         <div class="flex items-center justify-center space-x-2">
           <svg
@@ -260,7 +261,15 @@
             ></path>
           </svg>
           <a href="" class="hidden sm:block">Share</a>
-        </div></div>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center justify-center space-x-2">
+          {{#if isAuthorized}}
+            <p><a href="">Edit</a></p>
+          {{/if}}
+        </div>
+      </div>
     </div>
   </div>
 {{/each}}

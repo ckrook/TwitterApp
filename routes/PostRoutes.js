@@ -23,7 +23,6 @@ router.post("/new", async (req, res) => {
   const userId = res.locals.userId;
   const username = res.locals.username;
   const displayname = res.locals.displayname;
-  console.log(userId, username);
   const { content } = req.body;
 
   if (!content || !content.trim()) {
