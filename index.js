@@ -117,7 +117,6 @@ app.post("/login", async (req, res) => {
       res.cookie("token", accesToken);
       res.redirect("/");
     } else {
-      console.log(err);
       res.send("Login failed");
     }
   });
@@ -142,11 +141,9 @@ app.get(
 
   async (req, res) => {
     // Login with google successful
-    // console.log(req.user);
     const googleId = req.user.id;
     UsersModel.findOne({ googleId }, async (err, user) => {
       if (user) {
-        console.log("Hittade användaren!");
         const bio = user.bio;
         const city = user.city;
         const following_count = user.follows.length;
@@ -166,8 +163,6 @@ app.get(
         userData.id = user._id;
         const accesToken = jwt.sign(userData, process.env.JWTSECRET);
         res.cookie("token", accesToken);
-
-        console.log("Satt cookie på användaren");
         res.redirect("/");
       } else {
         const newUser = new UsersModel({
@@ -199,7 +194,7 @@ app.get(
             posts_count,
           };
           userData.id = user._id;
-          console.log(userData, "hi there hello");
+
           const accesToken = jwt.sign(userData, process.env.JWTSECRET);
           res.cookie("token", accesToken);
           res.redirect("/");
@@ -275,7 +270,6 @@ app.post("/sign-up-extra", async (req, res) => {
   dbUser.bio = bio;
 
   await dbUser.save();
-  console.log("Success");
   res.redirect("/");
 });
 
