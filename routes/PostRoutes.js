@@ -4,17 +4,33 @@ const router = express.Router();
 const PostsModel = require("../models/PostsModel.js");
 
 const { forceAuthorize, followthem, sortPosts } = require("../middleware.js");
+const { timeAgo } = require("../utils.js");
+const CommentsModel = require("../models/CommentsModel.js");
 
 router.get("/", (req, res) => {
   res.render("start");
 });
 
-router.get("/single/:id", followthem, sortPosts,  async (req, res) => {
-  const post = await PostsModel.findById(req.params.id)
+router.get("/single/:id", followthem, async (req, res) => {
+  const followthem = req.followthem;
+  const userId = res.locals.userId;
+  const id = req.params.id;
+
+  const post = await PostsModel.findById(id)
     .populate("comments")
     .lean();
+    
+  const postComments = post.comments;
 
-  let followthem = req.followthem;
+  for (const comment of postComments) {
+    comment.created = timeAgo(comment.created);
+  }
+
+  for (let i = 0; i < postComments.length; i++) {
+    if(postComments[i].author_id.toString() === userId.toString()){
+      postComments[i].editable = true;
+    }
+  }
 
   res.render("post-single-home", { post, followthem });
 });

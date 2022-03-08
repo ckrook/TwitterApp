@@ -36,14 +36,14 @@ router.post("/new/:id", async (req, res) => {
 });
 
 router.get("/edit", async (req, res) => {
-  const isAuthorized = async () => {
-    const userId = res.locals.userId;
-    const userComments = await CommentsModel.find({ author_id: userId });
+  // const isAuthorized = async () => {
+  //   const userId = res.locals.userId;
+  //   const userComments = await CommentsModel.find({ author_id: userId });
 
     
-  }
+  // }
 
-  res.render("post-single", {isAuthorized});
+  res.render("post-single");
 });
 
 router.delete("/delete", (req, res) => {
