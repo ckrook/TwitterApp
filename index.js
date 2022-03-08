@@ -1,5 +1,6 @@
 require("dotenv").config();
 require("./mongoose.js");
+require("./passport.js");
 
 const express = require("express");
 const exphbs = require("express-handlebars");
@@ -13,8 +14,11 @@ const postRoutes = require("./routes/PostRoutes.js");
 const commentRoutes = require("./routes/CommentRoutes.js");
 const seedDataRoutes = require("./routes/SeedDataRoutes.js");
 const PostsModel = require("./models/PostsModel.js");
+const passport = require("passport");
 
 const app = express();
+
+app.use(passport.initialize());
 
 app.engine(
   "hbs",
@@ -44,6 +48,7 @@ app.use((req, res, next) => {
   if (token && jwt.verify(token, process.env.JWTSECRET)) {
     // Logged in
     const tokenData = jwt.decode(token, process.env.JWTSECRET);
+    res.locals.loginInfo = tokenData.displayName + " " + tokenData.id;
     res.locals.loggedIn = true;
     res.locals.userId = tokenData.userId;
     res.locals.username = tokenData.username;
@@ -106,6 +111,7 @@ app.post("/login", async (req, res) => {
         followers_count,
         posts_count,
       };
+
       const accesToken = jwt.sign(userData, process.env.JWTSECRET);
 
       res.cookie("token", accesToken);
@@ -120,10 +126,72 @@ app.post("/login", async (req, res) => {
 app.get("/", (req, res) => {
   res.render("login-module");
 });
+
+///////////////////
+// Google Login //
+/////////////////
+
+app.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+
+app.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/failure" }),
+
+  async (req, res) => {
+    // Login with google successful
+    // console.log(req.user);
+    const googleId = req.user.id;
+    UsersModel.findOne({ googleId }, async (err, user) => {
+      const bio = user.bio;
+      const city = user.city;
+      const following_count = user.follows.length;
+      const followers_count = user.followers.length;
+      const posts_count = user.posts.length;
+      const displayname = user.displayname;
+      const userData = {
+        userId: user._id,
+        username: user.username,
+        displayname,
+        bio,
+        city,
+        following_count,
+        followers_count,
+        posts_count,
+      };
+      console.log(user);
+      if (user) {
+        userData.id = user._id;
+      } else {
+        const newUser = new UsersModel({
+          googleId,
+          username:
+            req.user.displayName.replace(/ /g, "") +
+            Math.floor(Math.random() * 100),
+          displayname: req.user.displayName,
+          hashedPassword: utils.hashedPassword(utils.genPassword()),
+          email: req.user.emails[0].value,
+        });
+        const result = await newUser.save();
+        userData.id = result._id;
+      }
+      // userdata: {googleId, id}
+      const accesToken = jwt.sign(userData, process.env.JWTSECRET);
+
+      res.cookie("token", accesToken);
+      res.redirect("/");
+    });
+  }
+);
+
+// Google login end
+
+//Sign up
 app.get("/sign-up", (req, res) => {
   res.render("signup");
 });
-//Sign up
 app.post("/sign-up", async (req, res, next) => {
   const { username, password, confirmpassword, email } = req.body;
 
