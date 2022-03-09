@@ -1,0 +1,40 @@
+<div class="flex p-10 gap-10 border-b">
+  {{!Submit a post }}
+  {{!-- <div class="avatar">
+    <a href="/">
+      <img
+        id="avatar"
+        class="rounded-full w-20"
+        src="{{profile.profilePicture}}"
+        alt=""
+      />
+    </a>
+  </div> --}}
+
+  <div class="w-full">
+    <form class="mb-0" action="/single/{{post.id}}/edit" method="POST">
+      <textarea
+        class="w-full mb-5 resize-none border-b-2 border-gray-200"
+        name="content"
+        id=""
+        cols="30"
+        rows="4"
+        placeholder="Update your post"
+      ></textarea>
+
+      <div class="flex justify-end">
+        <div class="text-sm text-red-500 w-full">
+          {{error}}
+        </div>
+        <input
+          value="Send"
+          type="submit"
+          class="w-32 py-2 px-4 bg-blue-400 hover:bg-blue-400 focus:ring-blue-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-full"
+        />
+
+      </div>
+    </form>
+  </div>
+</div>
+
+{{!Submit a post ends }}
