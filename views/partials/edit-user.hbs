@@ -63,8 +63,8 @@
 
     <input type="submit" class="cursor-pointer text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" value="Save profile">
   </form>
-    <form action="/delete" method="post">
-        <input  class="cursor-pointer text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" value="Delete profile">
+    <form action="/user/delete/{{user._id}}" method="post">
+        <input type="submit" class="cursor-pointer text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" value="Delete profile">
     </form>
       </div>
     </div>

@@ -119,8 +119,12 @@ router.post("/edit/:id", followthem, async (req, res) => {
   }
 });
 
-router.delete("/delete", (req, res) => {
-  res.render("delete-profile");
+router.post("/delete/:id", async (req, res) => {
+  await UsersModel.findByIdAndDelete(req.params.id);
+
+  res.cookie("token", "", { maxAge: 0 });
+
+  res.redirect("/");
 });
 
 module.exports = router;
