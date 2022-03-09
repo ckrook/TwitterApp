@@ -57,8 +57,15 @@ router.post("/edit/:id", async (req, res) => {
   res.redirect("/post/single/" + comment.post_id);
 });
 
-router.post("/delete/:id", (req, res) => {
-  res.redirect("delete-comment");
+router.post("/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  const comment = await CommentsModel.findById(id);
+
+  const post_id = comment.post_id;
+
+  await CommentsModel.findByIdAndDelete(id);
+
+  res.redirect("/post/single/" + post_id);
 });
 
 module.exports = router;
