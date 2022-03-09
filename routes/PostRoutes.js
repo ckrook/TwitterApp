@@ -10,14 +10,30 @@ router.get("/", (req, res) => {
   res.render("start");
 });
 
+// router.get("/single", (req, res) => {
+//   res.redirect("post-single");
+// });
+
+router.get("/single/edit/:id", (req, res) => {
+  res.render("edit-post-home");
+});
+
+router.get("/single/delete/:id", (req, res) => {
+  res.render("delete-post-home");
+});
+
 router.get("/single/:id", followthem, sortPosts,  async (req, res) => {
-  const post = await PostsModel.findById(req.params.id)
+  const postId = req.params.id;
+  const currentUser = res.locals.userId;
+
+  const post = await PostsModel.findOne({_id: postId})
     .populate("comments")
     .lean();
 
     let followthem = req.followthem;
+    const content = post.content;
 
-  res.render("post-single-home", { post, followthem });
+  res.render("post-single-home", { post, followthem, postId, currentUser });
 });
 
 router.post("/new", async (req, res) => {
@@ -26,6 +42,7 @@ router.post("/new", async (req, res) => {
   const displayname = res.locals.displayname;
   console.log(userId, username);
   const { content } = req.body;
+  const postId = req.params.id;
 
   if (!content || !content.trim()) {
     res.render("home", {
@@ -36,81 +53,74 @@ router.post("/new", async (req, res) => {
       author_id: userId,
       author_name: username,
       author_displayname: displayname,
-      content: content,
+      content: content
     });
 
     await newPost.save();
-
     res.redirect("/");
   }
 });
 
-//GET för edit
-router.get("/post/single/:id/edit", followthem, sortPosts,  async (req, res) => {
-  const id = req.params.id;
-    
-  const post = await PostsModel.findById(req.params.id)
-    .populate("comments")
-    .lean();
+router.get("/edit/:id", followthem, sortPosts,  async (req, res) => {
+  const postId = req.params.id;
+
+  const post = await PostsModel.findOne({_id: postId}).lean();
 
   let followthem = req.followthem;
 
   const authorId = post.author_id;
-  const authorUsername = post.author_name;
-  const currentUserId = res.locals.userId;
-  const currentUsername = res.locals.username;
-  const currentUsersPosts = await PostsModel.find({ author_id: userId });
+  const currentUser = res.locals.userId;
+  // const currentUsersPosts = await PostsModel.find({ author_id: userId });
 
-  if (!currentUserId == authorId) {
+  if (!currentUser == authorId) {
     res.send("You don't have edit access");
     res.redirect("/")
 
-  } else if (currentUserId == authorId) {
-    res.redirect("/single/:id/edit");
+  } else if (currentUser == authorId) {
+    res.redirect("/single/edit/:id");
     }
 
-  // console.log("The author of this post is: " + authorUsername + " - ", authorId);
-  // console.log("Current user logged in is: " + currentUsername, currentUserId);
-
-  res.render("edit-post", { post, followthem, id });
+  res.render("edit-post-home", { post, postId, authorId, currentUser, followthem });
 });
 
 //POST för edit
-router.post("/single/:id/edit", async (req, res) => {
-  const id = req.params.id;
-    
-    const post = PostsModel.findByIdAndUpdate(req.params.id);
-    post.content = req.body.content;
+router.post("/edit/:id", async (req, res) => {
+    const postId = req.params.id;
 
-    if (!content || !content.trim()) {
-        res.send("This can't be empty");
-    }
-    await post.save();
-
-  res.render("edit-post", { post, id });
-});
-
-//GET för delete
-router.get("/single/:id/delete", followthem, sortPosts,  async (req, res) => {
+    const post = await PostsModel.findOneAndUpdate({_id: postId}, { $set: content = req.body.content });
   
-  const id = req.params.id;
-    
-  const post = await PostsModel.findById(req.params.id)
-    .populate("comments")
-    .lean();
+    if (!post.content || !post.content.trim()) {
+        res.render("edit-post-home", {
+          error: "This can't be empty",
+        });
+    }
+    else {
+      await post.save();
+    }
 
-  let followthem = req.followthem;
-
-  res.render("delete-post", { post, followthem });
+  res.redirect("post/single/" + postId);
 });
 
-//POST för delete
-router.post("/single/:id/delete", async (req, res) => {
 
-  const post = PostsModel.findByIdAndDelete(req.params.id);
+router.get("/delete/:id", async (req, res) => {
+  const postId = req.params.id;
+  const currentUser = res.locals.userId;
+
+  const post = await PostsModel.findOne({_id: postId}).lean();
+
+  res.render("delete-post", {  post, postId, authorId, currentUser });
+});
+
+
+router.post("/delete/:id", async (req, res) => {
+  const postId = req.params.id;
+  const userId = res.locals.userId;
+
+  const post = await PostsModel.findOneAndDelete({ _id: postId });
+
   await post.save();
 
-  res.render("delete-post", { post });
+  res.redirect("/user/" + userId);
 });
 
 module.exports = router;
