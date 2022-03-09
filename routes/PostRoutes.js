@@ -38,22 +38,16 @@ router.post("/new", async (req, res) => {
   const displayname = res.locals.displayname;
   const { content } = req.body;
 
-  if (!content || !content.trim()) {
-    res.render("home", {
-      error: "This can't be empty big man",
-    });
-  } else {
-    const newPost = new PostsModel({
-      author_id: userId,
-      author_name: username,
-      author_displayname: displayname,
-      content: content,
-    });
+  const newPost = new PostsModel({
+    author_id: userId,
+    author_name: username,
+    author_displayname: displayname,
+    content: content,
+  });
 
-    await newPost.save();
+  await newPost.save();
 
-    res.redirect("/");
-  }
+  res.redirect("/");
 });
 
 router.put("/edit", (req, res) => {
