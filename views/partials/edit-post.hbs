@@ -1,0 +1,64 @@
+
+<div class="flex-grow h-screen overflow-y-scroll scrollbar-hide">
+  <div class="flex w-full lg:w-11/12">
+
+   <div
+    class="flex flex-col w-[600px] px-10 pt-10 pb-5 gap-10 border-b border-gray-200"
+  >
+    <div class="flex gap-10">
+      <div class="avatar">
+        <img
+          class="rounded-full w-20"
+          src="https://www.w3schools.com/howto/img_avatar2.png"
+          alt=""
+        />
+      </div>
+      <div class="w-full flex flex-col">
+        <div class="flex space-x-2">
+          <h2><b>{{post.author_displayname}}</b></h2>
+        </div>
+        <div class="flex space-x-2">
+          <h2 class="text-gray-400">@{{post.author_name}}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-5 ">
+        <p class="text-xl break-words break-all">
+          {{post.content}}
+        </p>
+
+  <div class="p-8 bg-white rounded-lg">
+  <h2 class="text-lg font-bold">Edit post</h2>  
+  {{>edit-form}}
+  </div>
+  
+        <span class="text-gray-400">{{formatDate post.created}}</span>
+    </div>
+  </div>
+  <div class="flex justify-start md:justify-start gap-10 px-10 py-5 border-b border-gray-200">
+    <div>
+      <div class="flex flex-col items-center justify-center space-x-2">
+        <div class="hover:border-b hover:border-gray-200">
+          <a href="" class="hidden sm:block">
+            <span class="font-bold">{{post.retweet_count}}</span>
+            <span class="text-gray-400">Retweets</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="flex flex-col items-center justify-center space-x-2">
+        <div class="hover:border-b hover:border-gray-200">
+          <a href="" class="hidden sm:block">
+            <span class="font-bold">{{post.like_count}}</span>
+            <span class="text-gray-400">likes</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div>
+
+
+
+</div>
+</div>
