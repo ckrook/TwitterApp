@@ -151,7 +151,7 @@
         id=""
         cols="30"
         rows="4"
-        placeholder="Type your answer"
+        placeholder="Respond to @{{post.author_name}}"
       ></textarea>
       <div class="flex justify-end">
       <div class="text-sm text-red-500 w-full">
@@ -243,24 +243,18 @@
             ></path>
           </svg>
           <a href="" class="hidden sm:block">{{like_count}}</a>
-        </div></div>
+        </div>
+      </div>
       <div>
         <div class="flex items-center justify-center space-x-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            fill="currentColor"
-            class="bi bi-arrow-bar-up"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5zm-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"
-            ></path>
-          </svg>
-          <a href="" class="hidden sm:block">Share</a>
-        </div></div>
+          {{#if editable}}
+            <p><a href="/comment/edit/{{_id}}" class="border-b border-gray-400 ">Edit</a></p>
+            <form action="/comment/delete/{{_id}}" method="post" class="mb-0">
+              <input type="submit" value="Delete" class="border-b border-gray-400">
+            </form>
+          {{/if}}
+        </div>
+      </div>
     </div>
   </div>
 {{/each}}
