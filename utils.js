@@ -26,7 +26,6 @@ function timeAgo(input) {
   for (let key in ranges) {
     if (ranges[key] < Math.abs(secondsElapsed)) {
       const delta = secondsElapsed / ranges[key];
-      console.log(key.charAt(0));
       return formatter.format(Math.round(delta), key);
     }
   }

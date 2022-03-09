@@ -142,56 +142,36 @@
 
     </div>
     <div>
-      <form
-        class="cursor-pointer mb-0 flex items-center border-0 py-1 px-3 focus:outline-none text-base"
-        action="/log-out"
-        method="post"
-      >
-        <div class="flex justify-start items-center w-full">
-          <a class="flex justify-start items-center w-full" href="/">
-            <img
-              id="avatar"
-              class="mr-0 sm:mr-2 w-[40px] sm:w-[60px] rounded-full"
-              src="{{profile.profilePicture}}"
-              alt="Charles Krook"
-            />
-            <div class="flex flex-col justify-start w-full hidden sm:block">
-              <b>{{username}}</b>
-              <p class="text-gray-400">@{{username}}</p>
-            </div>
-          </a>
-          <div class="flex justify-end">
-            <label
-              class="cursor-pointer hover:bg-gray-200 p-3 rounded-full hidden sm:block"
-            >
-              <input
-                type="submit"
-                class="hidden sm:block"
-                name="mysubmit"
-                value="val1"
-                style="display: none;"
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="17"
-                height="17"
-                fill="currentColor"
-                class="bi bi-box-arrow-right"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"
-                ></path>
-                <path
-                  fill-rule="evenodd"
-                  d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"
-                ></path>
-              </svg>
-            </label>
+
+      <div class="flex flex-col justify-start items-center w-full text-sm">
+        <a class="flex justify-center items-center w-full" href="/">
+          <img
+            id="avatar"
+            class="mr-0 sm:mr-2 w-[40px] sm:w-[60px] rounded-full"
+            src="{{profile.profilePicture}}"
+            alt="Charles Krook"
+          />
+          <div class="flex flex-col justify-start w-full hidden sm:block">
+            <b>{{username}}</b>
+            <p class="text-gray-400">@{{username}}</p>
           </div>
+        </a>
+        <div class="flex w-full">
+          <form
+            class="cursor-pointer w-full text-center mb-0 flex items-center border-0 py-1 focus:outline-none text-base"
+            action="/log-out"
+            method="post"
+          >
+            <input
+              class="text-xs sm:text-sm mx-3 w-full border border-gray-300 p-2 rounded-full cursor-pointer"
+              type="submit"
+              name="mysubmit"
+              value="Logga ut"
+            />
+
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
