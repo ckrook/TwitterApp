@@ -18,18 +18,18 @@ router.get("/single/:id", followthem, async (req, res) => {
   const post = await PostsModel.findById(id)
     .populate("comments")
     .lean();
-    
   const postComments = post.comments;
-
+  
   for (const comment of postComments) {
     comment.created = timeAgo(comment.created);
   }
-
+  
   for (let i = 0; i < postComments.length; i++) {
     if(postComments[i].author_id.toString() === userId.toString()){
       postComments[i].editable = true;
     }
   }
+  postComments.reverse();
 
   res.render("post-single-home", { post, followthem });
 });

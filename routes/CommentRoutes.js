@@ -37,7 +37,7 @@ router.post("/new/:id", async (req, res) => {
   res.redirect("/post/single/" + postId);
 });
 
-router.get("/comment/edit/:id", followthem ,async (req, res) => {
+router.get("/edit/:id", followthem ,async (req, res) => {
   const comment = await CommentsModel.findById(req.params.id).lean();
 
   let followthem = req.followthem;
@@ -45,7 +45,19 @@ router.get("/comment/edit/:id", followthem ,async (req, res) => {
   res.render("comment-single-home", { comment, followthem });
 });
 
-router.delete("/delete", (req, res) => {
+router.post("/edit/:id", async (req, res) => {
+  const comment = await CommentsModel.findById(req.params.id);
+
+  comment.content = req.body.content;
+
+  await comment.save();
+
+  console.log(comment);
+
+  res.redirect("/post/single/" + comment.post_id);
+});
+
+router.post("/delete/:id", (req, res) => {
   res.redirect("delete-comment");
 });
 
