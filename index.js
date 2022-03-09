@@ -91,6 +91,7 @@ app.use("/seed-data", seedDataRoutes);
 
 // Login //
 app.post("/login", async (req, res) => {
+  const error = "Användarnamn eller lösenord är felaktigt";
   const { username, password } = req.body;
   UsersModel.findOne({ username }, (err, user) => {
     if (user && utils.comparePassword(password, user.hashedPassword)) {
@@ -117,8 +118,7 @@ app.post("/login", async (req, res) => {
       res.cookie("token", accesToken);
       res.redirect("/");
     } else {
-      console.log(err);
-      res.send("Login failed");
+      res.render("home", { error });
     }
   });
 });
@@ -142,28 +142,29 @@ app.get(
 
   async (req, res) => {
     // Login with google successful
-    // console.log(req.user);
     const googleId = req.user.id;
     UsersModel.findOne({ googleId }, async (err, user) => {
-      const bio = user.bio;
-      const city = user.city;
-      const following_count = user.follows.length;
-      const followers_count = user.followers.length;
-      const posts_count = user.posts.length;
-      const displayname = user.displayname;
-      const userData = {
-        userId: user._id,
-        username: user.username,
-        displayname,
-        bio,
-        city,
-        following_count,
-        followers_count,
-        posts_count,
-      };
-      console.log(user);
       if (user) {
+        const bio = user.bio;
+        const city = user.city;
+        const following_count = user.follows.length;
+        const followers_count = user.followers.length;
+        const posts_count = user.posts.length;
+        const displayname = user.displayname;
+        const userData = {
+          userId: user._id,
+          username: user.username,
+          displayname,
+          bio,
+          city,
+          following_count,
+          followers_count,
+          posts_count,
+        };
         userData.id = user._id;
+        const accesToken = jwt.sign(userData, process.env.JWTSECRET);
+        res.cookie("token", accesToken);
+        res.redirect("/");
       } else {
         const newUser = new UsersModel({
           googleId,
@@ -174,14 +175,32 @@ app.get(
           hashedPassword: utils.hashedPassword(utils.genPassword()),
           email: req.user.emails[0].value,
         });
-        const result = await newUser.save();
-        userData.id = result._id;
-      }
-      // userdata: {googleId, id}
-      const accesToken = jwt.sign(userData, process.env.JWTSECRET);
+        await newUser.save();
 
-      res.cookie("token", accesToken);
-      res.redirect("/");
+        const user = UsersModel.findOne({ googleId }, async (err, user) => {
+          const bio = user.bio;
+          const city = user.city;
+          const following_count = user.follows.length;
+          const followers_count = user.followers.length;
+          const posts_count = user.posts.length;
+          const displayname = user.displayname;
+          const userData = {
+            userId: user._id,
+            username: user.username,
+            displayname,
+            bio,
+            city,
+            following_count,
+            followers_count,
+            posts_count,
+          };
+          userData.id = user._id;
+
+          const accesToken = jwt.sign(userData, process.env.JWTSECRET);
+          res.cookie("token", accesToken);
+          res.redirect("/");
+        });
+      }
     });
   }
 );
@@ -196,12 +215,10 @@ app.post("/sign-up", async (req, res, next) => {
   const { username, password, confirmpassword, email } = req.body;
 
   UsersModel.findOne({ username }, async (err, user) => {
-    if (user) return res.status(400).send("Username is already taken");
-    if (password !== confirmpassword)
-      return res.status(400).send("Password dont match");
+    if (user) return res.status(400).render("signup");
+    if (password !== confirmpassword) return res.status(400).render("signup");
     UsersModel.findOne({ email }, async (err, user) => {
-      if (email === username.email)
-        return res.status(400).send("Email is already in use");
+      if (email === username.email) return res.status(400).render("signup");
     });
 
     const newUser = new UsersModel({
@@ -252,7 +269,6 @@ app.post("/sign-up-extra", async (req, res) => {
   dbUser.bio = bio;
 
   await dbUser.save();
-  console.log("Success");
   res.redirect("/");
 });
 

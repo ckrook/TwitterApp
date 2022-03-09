@@ -3,18 +3,31 @@ const router = express.Router();
 
 const PostsModel = require("../models/PostsModel.js");
 
-const { forceAuthorize, followthem, sortPosts } = require("../middleware.js");
+const { followthem } = require("../middleware.js");
+const { timeAgo } = require("../utils.js");
 
 router.get("/", (req, res) => {
   res.render("start");
 });
 
-router.get("/single/:id", followthem, sortPosts,  async (req, res) => {
-  const post = await PostsModel.findById(req.params.id)
-    .populate("comments")
-    .lean();
+router.get("/single/:id", followthem, async (req, res) => {
+  const followthem = req.followthem;
+  const userId = res.locals.userId;
+  const id = req.params.id;
 
-  let followthem = req.followthem;
+  const post = await PostsModel.findById(id).populate("comments").lean();
+  const postComments = post.comments;
+
+  for (const comment of postComments) {
+    comment.created = timeAgo(comment.created);
+  }
+
+  for (let i = 0; i < postComments.length; i++) {
+    if (postComments[i].author_id.toString() === userId.toString()) {
+      postComments[i].editable = true;
+    }
+  }
+  postComments.reverse();
 
   res.render("post-single-home", { post, followthem });
 });
@@ -23,25 +36,18 @@ router.post("/new", async (req, res) => {
   const userId = res.locals.userId;
   const username = res.locals.username;
   const displayname = res.locals.displayname;
-  console.log(userId, username);
   const { content } = req.body;
 
-  if (!content || !content.trim()) {
-    res.render("home", {
-      error: "This can't be empty big man",
-    });
-  } else {
-    const newPost = new PostsModel({
-      author_id: userId,
-      author_name: username,
-      author_displayname: displayname,
-      content: content,
-    });
+  const newPost = new PostsModel({
+    author_id: userId,
+    author_name: username,
+    author_displayname: displayname,
+    content: content,
+  });
 
-    await newPost.save();
+  await newPost.save();
 
-    res.redirect("/");
-  }
+  res.redirect("/");
 });
 
 router.put("/edit", (req, res) => {
