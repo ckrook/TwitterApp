@@ -5,7 +5,6 @@ const PostsModel = require("../models/PostsModel.js");
 
 const { forceAuthorize, followthem, sortPosts } = require("../middleware.js");
 const UsersModel = require("../models/UsersModel.js");
-const { followthem } = require("../middleware.js");
 const { timeAgo } = require("../utils.js");
 
 router.get("/", (req, res) => {
