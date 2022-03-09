@@ -4,6 +4,8 @@ const router = express.Router();
 const CommentsModel = require("../models/CommentsModel.js");
 const PostsModel = require("../models/PostsModel.js");
 
+const { followthem } = require("../middleware.js");
+
 router.get("/", (req, res) => {
   res.render("start");
 });
@@ -35,15 +37,12 @@ router.post("/new/:id", async (req, res) => {
   res.redirect("/post/single/" + postId);
 });
 
-router.get("/edit", async (req, res) => {
-  // const isAuthorized = async () => {
-  //   const userId = res.locals.userId;
-  //   const userComments = await CommentsModel.find({ author_id: userId });
+router.get("/comment/edit/:id", followthem ,async (req, res) => {
+  const comment = await CommentsModel.findById(req.params.id).lean();
 
-    
-  // }
+  let followthem = req.followthem;
 
-  res.render("post-single");
+  res.render("comment-single-home", { comment, followthem });
 });
 
 router.delete("/delete", (req, res) => {

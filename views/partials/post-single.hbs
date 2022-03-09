@@ -151,7 +151,7 @@
         id=""
         cols="30"
         rows="4"
-        placeholder="Type your answer"
+        placeholder="Respond to @{{post.author_name}}"
       ></textarea>
       <div class="flex justify-end">
       <div class="text-sm text-red-500 w-full">
@@ -245,7 +245,7 @@
           <a href="" class="hidden sm:block">{{like_count}}</a>
         </div>
       </div>
-      <div>
+      {{!-- <div>
         <div class="flex items-center justify-center space-x-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -262,11 +262,14 @@
           </svg>
           <a href="" class="hidden sm:block">Share</a>
         </div>
-      </div>
+      </div> --}}
       <div>
         <div class="flex items-center justify-center space-x-2">
           {{#if editable}}
-            <p><a href="">Edit</a></p>
+            <p><a href="/comment/edit/{{_id}}" class="border-b border-gray-400 ">Edit</a></p>
+            <form action="/comment/delete/{{_id}}" method="post" class="mb-0">
+              <input type="submit" value="Delete" class="border-b border-gray-400">
+            </form>
           {{/if}}
         </div>
       </div>

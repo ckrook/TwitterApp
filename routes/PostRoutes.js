@@ -3,9 +3,8 @@ const router = express.Router();
 
 const PostsModel = require("../models/PostsModel.js");
 
-const { forceAuthorize, followthem, sortPosts } = require("../middleware.js");
+const { followthem } = require("../middleware.js");
 const { timeAgo } = require("../utils.js");
-const CommentsModel = require("../models/CommentsModel.js");
 
 router.get("/", (req, res) => {
   res.render("start");
