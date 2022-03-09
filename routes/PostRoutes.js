@@ -9,13 +9,12 @@ router.get("/", (req, res) => {
   res.render("start");
 });
 
-router.get("/single/:id", followthem, sortPosts,  async (req, res) => {
+router.get("/single/:id", followthem, sortPosts, async (req, res) => {
   const post = await PostsModel.findById(req.params.id)
     .populate("comments")
     .lean();
 
   let followthem = req.followthem;
-
   res.render("post-single-home", { post, followthem });
 });
 
