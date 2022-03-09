@@ -7,7 +7,8 @@ const commentSchema = new mongoose.Schema({
     author_name: { type: String, required: true},
     author_displayname: { type: String, required: true},
     post_id: { type: mongoose.Schema.Types.ObjectId, required: true},
-    like_count: Number
+    like_count: Number,
+    editable: { type: Boolean, default: false}
 });
 
 const CommentsModel = mongoose.model("Comments", commentSchema);

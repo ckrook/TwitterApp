@@ -5,14 +5,12 @@ const PostsModel = require("../models/PostsModel.js");
 
 const { forceAuthorize, followthem, sortPosts } = require("../middleware.js");
 const UsersModel = require("../models/UsersModel.js");
+const { followthem } = require("../middleware.js");
+const { timeAgo } = require("../utils.js");
 
 router.get("/", (req, res) => {
   res.render("start");
 });
-
-// router.get("/single", (req, res) => {
-//   res.redirect("post-single");
-// });
 
 router.get("/single/edit/:id", (req, res) => {
   res.render("edit-post-home");
@@ -23,15 +21,25 @@ router.get("/single/delete/:id", (req, res) => {
 });
 
 router.get("/single/:id", followthem, sortPosts,  async (req, res) => {
+  const followthem = req.followthem;
+  const userId = res.locals.userId;
+  const id = req.params.id;
   const postId = req.params.id;
   const currentUser = res.locals.userId;
 
-  const post = await PostsModel.findOne({_id: postId})
-    .populate("comments")
-    .lean();
+  const post = await PostsModel.findById(id).populate("comments").lean();
+  const postComments = post.comments;
 
-    let followthem = req.followthem;
-    const content = post.content;
+  for (const comment of postComments) {
+    comment.created = timeAgo(comment.created);
+  }
+
+  for (let i = 0; i < postComments.length; i++) {
+    if (postComments[i].author_id.toString() === userId.toString()) {
+      postComments[i].editable = true;
+    }
+  }
+  postComments.reverse();
 
   res.render("post-single-home", { post, followthem, postId, currentUser });
 });
@@ -40,7 +48,6 @@ router.post("/new", async (req, res) => {
   const userId = res.locals.userId;
   const username = res.locals.username;
   const displayname = res.locals.displayname;
-  console.log(userId, username);
   const { content } = req.body;
   const postId = req.params.id;
 
