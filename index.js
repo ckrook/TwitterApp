@@ -91,6 +91,7 @@ app.use("/seed-data", seedDataRoutes);
 
 // Login //
 app.post("/login", async (req, res) => {
+  const error = "Användarnamn eller lösenord är felaktigt";
   const { username, password } = req.body;
   UsersModel.findOne({ username }, (err, user) => {
     if (user && utils.comparePassword(password, user.hashedPassword)) {
@@ -117,7 +118,7 @@ app.post("/login", async (req, res) => {
       res.cookie("token", accesToken);
       res.redirect("/");
     } else {
-      res.send("Login failed");
+      res.render("home", { error });
     }
   });
 });
@@ -214,12 +215,10 @@ app.post("/sign-up", async (req, res, next) => {
   const { username, password, confirmpassword, email } = req.body;
 
   UsersModel.findOne({ username }, async (err, user) => {
-    if (user) return res.status(400).send("Username is already taken");
-    if (password !== confirmpassword)
-      return res.status(400).send("Password dont match");
+    if (user) return res.status(400).render("signup");
+    if (password !== confirmpassword) return res.status(400).render("signup");
     UsersModel.findOne({ email }, async (err, user) => {
-      if (email === username.email)
-        return res.status(400).send("Email is already in use");
+      if (email === username.email) return res.status(400).render("signup");
     });
 
     const newUser = new UsersModel({

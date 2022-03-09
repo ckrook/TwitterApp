@@ -21,4 +21,22 @@ window.onload = () => {
       image.src = "/images/missing.png";
     }
   });
+
+  document.querySelector("#tweet-form").addEventListener("keyup", (e) => {
+    document.querySelector("#word-count").innerHTML = e.target.value.length;
+    if (e.target.value.length > 140) {
+      document.querySelector("#tweet-button").disabled = true;
+      document.querySelector("#tweet-button").classList.add("opacity-50");
+      document.querySelector("#word-count").classList.add("text-red-500");
+    }
+    if (e.target.value.length < 140) {
+      document.querySelector("#tweet-button").disabled = false;
+      document.querySelector("#tweet-button").classList.remove("opacity-50");
+      document.querySelector("#word-count").classList.remove("text-red-500");
+    }
+    if (e.target.value.length === 0) {
+      document.querySelector("#word-count").innerHTML = "";
+    }
+    console.log(e.target.value.length);
+  });
 };
