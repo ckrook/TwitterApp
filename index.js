@@ -53,6 +53,7 @@ app.use((req, res, next) => {
     res.locals.userId = tokenData.userId;
     res.locals.username = tokenData.username;
     res.locals.displayname = tokenData.displayname;
+    res.locals.profilePicture = tokenData.profilePicture;
     res.locals.bio = tokenData.bio;
     res.locals.city = tokenData.city;
     res.locals.following_count = tokenData.following_count;
@@ -101,6 +102,7 @@ app.post("/login", async (req, res) => {
       const following_count = user.follows.length;
       const followers_count = user.followers.length;
       const posts_count = user.posts.length;
+      const profilePicture = user.profilePicture;
       const displayname = user.displayname;
       const userData = {
         userId: user._id,
@@ -109,6 +111,7 @@ app.post("/login", async (req, res) => {
         bio,
         city,
         following_count,
+        profilePicture,
         followers_count,
         posts_count,
       };
@@ -149,6 +152,7 @@ app.get(
         const city = user.city;
         const following_count = user.follows.length;
         const followers_count = user.followers.length;
+        const profilePicture = user.profilePicture;
         const posts_count = user.posts.length;
         const displayname = user.displayname;
         const userData = {
@@ -160,6 +164,7 @@ app.get(
           following_count,
           followers_count,
           posts_count,
+          profilePicture,
         };
         userData.id = user._id;
         const accesToken = jwt.sign(userData, process.env.JWTSECRET);
@@ -237,12 +242,16 @@ app.post("/sign-up", async (req, res, next) => {
         const city = user.city;
         const following_count = user.follows.length;
         const followers_count = user.followers.length;
+        const displayname = user.displayname;
+        const profilePicture = user.profilePicture;
         const posts_count = user.posts.length;
         const userData = {
           userId: user._id,
           username,
           bio,
           city,
+          displayname,
+          profilePicture,
           following_count,
           followers_count,
           posts_count,

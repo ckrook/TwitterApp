@@ -58,11 +58,12 @@ router.post("/follow", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/edit/:id", async (req, res) => {
+router.get("/edit/:id", followthem, async (req, res) => {
   const id = req.params.id;
+  let followthem = req.followthem;
   if (res.locals.userId === id) {
     const user = await UsersModel.findOne({ _id: id }).lean();
-    res.render("profile-edit", { user });
+    res.render("profile-edit", { user, followthem });
   }
 });
 
@@ -89,6 +90,7 @@ router.post("/edit/:id", followthem, async (req, res) => {
     await image.mv(uploadPath);
     const dbUser = await UsersModel.findOne({ _id: id });
     dbUser.profilePicture = "/uploads/" + filename;
+    const profile = await UsersModel.findOne({ _id: id }).lean();
     await dbUser.save();
   }
   if (req.files && req.files.coverimage) {

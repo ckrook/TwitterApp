@@ -21,6 +21,7 @@ router.post("/new/:id", async (req, res) => {
     content: req.body.content,
     author_id: res.locals.userId,
     author_name: res.locals.username,
+    profilePicture: res.locals.profilePicture,
     author_displayname: res.locals.displayname,
     post_id: postId,
   });

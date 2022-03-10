@@ -19,7 +19,7 @@ router.get("/single/delete/:id", (req, res) => {
   res.render("delete-post-home");
 });
 
-router.get("/single/:id", followthem, sortPosts,  async (req, res) => {
+router.get("/single/:id", followthem, sortPosts, async (req, res) => {
   const followthem = req.followthem;
   const userId = res.locals.userId;
   const id = req.params.id;
@@ -47,9 +47,11 @@ router.post("/new", async (req, res) => {
   const userId = res.locals.userId;
   const username = res.locals.username;
   const displayname = res.locals.displayname;
+  const profilePicture = res.locals.profilePicture;
   const { content } = req.body;
   const postId = req.params.id;
-
+  console.log(displayname);
+  console.log(profilePicture);
   if (!content || !content.trim()) {
     res.render("home", {
       error: "This can't be empty big man",
@@ -59,18 +61,20 @@ router.post("/new", async (req, res) => {
       author_id: userId,
       author_name: username,
       author_displayname: displayname,
-      content: content
+      content: content,
+      profilePicture: profilePicture,
     });
 
     await newPost.save();
+    console.log(newPost);
     res.redirect("/");
   }
 });
 
-router.get("/edit/:id", followthem, sortPosts,  async (req, res) => {
+router.get("/edit/:id", followthem, sortPosts, async (req, res) => {
   const postId = req.params.id;
 
-  const post = await PostsModel.findOne({_id: postId}).lean();
+  const post = await PostsModel.findOne({ _id: postId }).lean();
 
   let followthem = req.followthem;
 
@@ -80,43 +84,48 @@ router.get("/edit/:id", followthem, sortPosts,  async (req, res) => {
 
   if (!currentUser == authorId) {
     res.send("You don't have edit access");
-    res.redirect("/")
-
+    res.redirect("/");
   } else if (currentUser == authorId) {
     res.redirect("/single/edit/:id");
-    }
+  }
 
-  res.render("edit-post-home", { post, postId, authorId, currentUser, followthem });
+  res.render("edit-post-home", {
+    post,
+    postId,
+    authorId,
+    currentUser,
+    followthem,
+  });
 });
 
 //POST för edit
 router.post("/edit/:id", async (req, res) => {
-    const postId = req.params.id;
+  const postId = req.params.id;
 
-    const post = await PostsModel.findOneAndUpdate({_id: postId}, { $set: content = req.body.content });
-  
-    if (!post.content || !post.content.trim()) {
-        res.render("edit-post-home", {
-          error: "This can't be empty",
-        });
-    }
-    else {
-      await post.save();
-    }
+  const post = await PostsModel.findOneAndUpdate(
+    { _id: postId },
+    { $set: (content = req.body.content) }
+  );
+
+  if (!post.content || !post.content.trim()) {
+    res.render("edit-post-home", {
+      error: "This can't be empty",
+    });
+  } else {
+    await post.save();
+  }
 
   res.redirect("post/single/" + postId);
 });
-
 
 router.get("/delete/:id", async (req, res) => {
   const postId = req.params.id;
   const currentUser = res.locals.userId;
 
-  const post = await PostsModel.findOne({_id: postId}).lean();
+  const post = await PostsModel.findOne({ _id: postId }).lean();
 
-  res.render("delete-post", {  post, postId, authorId, currentUser });
+  res.render("delete-post", { post, postId, authorId, currentUser });
 });
-
 
 router.post("/delete/:id", async (req, res) => {
   const postId = req.params.id;

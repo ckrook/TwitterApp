@@ -25,17 +25,17 @@ window.onload = () => {
   let tweetForm = document.querySelector("#tweet-form");
   let tweetButton = document.querySelector("#tweet-button");
 
-  if(tweetButton.disabled = true){
+  if ((tweetButton.disabled = true)) {
     tweetButton.classList.add("opacity-50");
   }
-  if(tweetForm.value.length > 0){
+  if (tweetForm.value.length > 0) {
     tweetButton.disabled = false;
     tweetButton.classList.remove("opacity-50");
   }
 
   document.querySelector("#tweet-form").addEventListener("keyup", (e) => {
     document.querySelector("#word-count").innerHTML = e.target.value.length;
-    if(e.target.value.length > 0) {
+    if (e.target.value.length > 0) {
       tweetButton.disabled = false;
       tweetButton.classList.remove("opacity-50");
     }
