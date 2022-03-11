@@ -294,6 +294,10 @@ app.post("/log-out", (req, res) => {
   res.redirect("/");
 });
 
+app.use("/", (req, res) => {
+  res.status(404).render("not-found");
+});
+
 app.listen(8000, () => {
   console.log("http://localhost:8000/");
 });
