@@ -31,6 +31,29 @@ function timeAgo(input) {
   }
 }
 
+function mydate(d) {
+  var mL = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  d = new Date(d);
+  const y = d.getFullYear();
+  const m = mL[d.getMonth()];
+  console.log(y);
+  console.log(m);
+  return "Joined " + m + " " + y;
+}
+
 function getUniqueFilename(filename) {
   const timestamp = Date.now();
   const extension = filename.split(".").pop();
@@ -55,4 +78,5 @@ module.exports = {
   timeAgo,
   getUniqueFilename,
   genPassword,
+  mydate,
 };

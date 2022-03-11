@@ -3,7 +3,7 @@ const UsersModel = require("../models/UsersModel.js");
 const router = express.Router();
 
 const mongoose = require("mongoose");
-const { timeAgo, getUniqueFilename } = require("./../utils");
+const { timeAgo, getUniqueFilename, mydate } = require("./../utils");
 //LOG IN
 router.get("/", (req, res) => {
   res.render("signup");
@@ -47,6 +47,10 @@ router.get("/:id", followthem, async (req, res) => {
   if (id === res.locals.userId) {
     edit = true;
   }
+  console.log(profile.created);
+  let date = profile.created;
+  profile.created = mydate(profile.created);
+  // profile.created = mydate(date);
   res.render("user-profile", { followthem, posts, profile, edit });
 });
 
@@ -116,8 +120,7 @@ router.post("/edit/:id", followthem, async (req, res) => {
     dbUser.city = city;
     dbUser.website = website;
     await dbUser.save();
-    const profile = await UsersModel.findOne({ _id: id }).lean();
-    res.render("user-profile", { profile, followthem, edit });
+    res.redirect("/user/" + id);
   }
 });
 

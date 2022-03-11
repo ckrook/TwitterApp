@@ -33,7 +33,7 @@ window.onload = () => {
     tweetButton.classList.remove("opacity-50");
   }
 
-  document.querySelector("#tweet-form").addEventListener("keyup", (e) => {
+  document.querySelector("#tweet-form").addEventListener("keydown", (e) => {
     document.querySelector("#word-count").innerHTML = e.target.value.length;
     if (e.target.value.length > 0) {
       tweetButton.disabled = false;
