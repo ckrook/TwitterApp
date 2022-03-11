@@ -18,7 +18,6 @@ router.post("/log-out", (req, res) => {
 });
 const UsersModel = require("../models/UsersModel.js");
 const PostsModel = require("../models/PostsModel.js");
-
 const { followthem } = require("./../middleware.js");
 
 router.get("/", (req, res) => {
@@ -71,6 +70,7 @@ router.post("/edit/:id", followthem, async (req, res) => {
   if (id === res.locals.userId) {
     edit = true;
   }
+  const user = await UsersModel.findOne({ _id: id }).lean();
   let followthem = req.followthem;
   let coverimage = "";
   let coverimagefilename = "";
@@ -88,7 +88,6 @@ router.post("/edit/:id", followthem, async (req, res) => {
     await image.mv(uploadPath);
     const dbUser = await UsersModel.findOne({ _id: id });
     dbUser.profilePicture = "/uploads/" + filename;
-    const profile = await UsersModel.findOne({ _id: id }).lean();
     await dbUser.save();
   }
   if (req.files && req.files.coverimage) {
@@ -105,6 +104,25 @@ router.post("/edit/:id", followthem, async (req, res) => {
   }
 
   const { displayname, username, email, bio, city, website } = req.body;
+  if (!displayname)
+    return res.render("profile-edit", {
+      error: "displayname cannot be empty",
+      user,
+      followthem,
+    });
+  if (!username)
+    return res.render("profile-edit", {
+      error: "Username cannot be empty",
+      user,
+      followthem,
+    });
+  if (!email)
+    return res.render("profile-edit", {
+      error: "Email cannot be empty",
+      user,
+      followthem,
+    });
+
   if (res.locals.userId === id) {
     const dbUser = await UsersModel.findOne({ _id: id });
     dbUser.displayname = displayname;
