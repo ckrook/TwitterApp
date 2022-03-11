@@ -17,8 +17,9 @@ const usersSchema = new mongoose.Schema({
   coverimage: String,
   posts: [
     {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       default: [],
+      ref: "Posts"
     },
   ],
   follows: [

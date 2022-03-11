@@ -1,4 +1,3 @@
-
 <div class="flex-grow h-screen overflow-y-scroll scrollbar-hide">
   <div class="flex w-full lg:w-11/12">
 
@@ -12,7 +11,7 @@
           src="https://www.w3schools.com/howto/img_avatar2.png"
           alt=""
         />
-      </div>
+      </div> 
       <div class="w-full flex flex-col">
         <div class="flex space-x-2">
           <h2><b>{{post.author_displayname}}</b></h2>
@@ -26,13 +25,9 @@
         <p class="text-xl break-words break-all">
           {{post.content}}
         </p>
-
-  <div class="p-8 bg-white rounded-lg">
-  <h2 class="text-lg font-bold">Edit post</h2>  
-  {{>edit-form}}
-  </div>
+        {{>edit-form}}
   
-        <span class="text-gray-400">{{formatDate post.created}}</span>
+        {{!-- <span class="text-gray-400">{{formatDate post.created}}</span> --}}
     </div>
   </div>
   <div class="flex justify-start md:justify-start gap-10 px-10 py-5 border-b border-gray-200">
@@ -57,8 +52,5 @@
       </div>
     </div>
     <div>
-
-
-
 </div>
 </div>

@@ -42,6 +42,10 @@ router.get("/edit/:id", followthem, async (req, res) => {
 
   let followthem = req.followthem;
 
+  if (!comment) {
+    res.render("not-found");
+  }
+
   res.render("comment-single-home", { comment, followthem });
 });
 
@@ -50,6 +54,10 @@ router.post("/edit/:id", async (req, res) => {
 
   comment.content = req.body.content;
 
+  if (!comment) {
+    res.render("not-found");
+  }
+  
   await comment.save();
 
   console.log(comment);

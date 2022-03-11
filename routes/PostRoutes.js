@@ -11,22 +11,45 @@ router.get("/", (req, res) => {
   res.render("start");
 });
 
-router.get("/single/edit/:id", (req, res) => {
-  res.render("edit-post-home");
+
+router.get("/single/edit/:id", async (req, res) => {
+  const followthem = req.followthem;
+  const userId = res.locals.userId;
+  const id = req.params.id;
+  const postId = req.params.id;
+  const currentUser = await UsersModel.findOne({ _id: userId }).populate("posts").lean();
+  const post = await PostsModel.findById(id).populate("comments").lean();
+  const authorId = post.authorId;
+
+  res.render("edit-post-home", {
+    followthem,
+    userId,
+    id,
+    postId,
+    currentUser,
+    post,
+    authorId
+  });
 });
 
-router.get("/single/delete/:id", (req, res) => {
-  res.render("delete-post-home");
-});
 
 router.get("/single/:id", followthem, sortPosts, async (req, res) => {
   const followthem = req.followthem;
   const userId = res.locals.userId;
   const id = req.params.id;
   const postId = req.params.id;
-  const currentUser = res.locals.userId;
-
+  const currentUser = await UsersModel.findOne({ _id: userId }).populate("posts").lean();
+  const posts = await PostsModel.find({ author_id: id }).lean();
   const post = await PostsModel.findById(id).populate("comments").lean();
+  const authorId = post.author_id;
+
+  for (let post of posts) {
+    post.created = timeAgo(post.created);
+  }
+  if (currentUser === authorId) {
+    editable = true;
+  }
+
   const postComments = post.comments;
 
   for (const comment of postComments) {
@@ -38,10 +61,40 @@ router.get("/single/:id", followthem, sortPosts, async (req, res) => {
       postComments[i].editable = true;
     }
   }
-  postComments.reverse();
+  postComments.reverse(); 
 
-  res.render("post-single-home", { post, followthem, postId, currentUser });
+  res.render("post-single-home", { post, followthem, postId });
 });
+
+router.get("/edit/:id", async (req, res) => {
+  const postId = req.params.id;
+
+  const post = await PostsModel.findOne({ _id: postId }).lean();
+
+  let followthem = req.followthem;
+
+  const authorId = post.author_id;
+  const currentUser = res.locals.userId;
+  const currentUsersPosts = await PostsModel.find({ author_id: userId });
+
+  if (!currentUser == authorId) {
+    res.render("not-found");
+    
+  } else if (currentUser == authorId) {
+    post.editable = true;
+    res.redirect("/post/single/edit/" + postId);
+  }
+
+  res.render("edit-post-home", {
+    post,
+    postId,
+    authorId,
+    currentUser,
+    currentUsersPosts,
+    followthem,
+  });
+});
+
 
 router.post("/new", async (req, res) => {
   const userId = res.locals.userId;
@@ -71,69 +124,38 @@ router.post("/new", async (req, res) => {
   }
 });
 
-router.get("/edit/:id", followthem, sortPosts, async (req, res) => {
-  const postId = req.params.id;
-
-  const post = await PostsModel.findOne({ _id: postId }).lean();
-
-  let followthem = req.followthem;
-
-  const authorId = post.author_id;
-  const currentUser = res.locals.userId;
-  // const currentUsersPosts = await PostsModel.find({ author_id: userId });
-
-  if (!currentUser == authorId) {
-    res.send("You don't have edit access");
-    res.redirect("/");
-  } else if (currentUser == authorId) {
-    res.redirect("/single/edit/:id");
-  }
-
-  res.render("edit-post-home", {
-    post,
-    postId,
-    authorId,
-    currentUser,
-    followthem,
-  });
-});
-
 //POST för edit
 router.post("/edit/:id", async (req, res) => {
+  
   const postId = req.params.id;
+  const post = await PostsModel.findById(req.params.id);
+  post.content = req.body.content;
 
-  const post = await PostsModel.findOneAndUpdate(
-    { _id: postId },
-    { $set: (content = req.body.content) }
-  );
-
-  if (!post.content || !post.content.trim()) {
-    res.render("edit-post-home", {
-      error: "This can't be empty",
-    });
-  } else {
-    await post.save();
+  if (!post.content) {
+    res.send("Can't leave this empty");
   }
+  
+  await post.save();
 
   res.redirect("post/single/" + postId);
 });
 
-router.get("/delete/:id", async (req, res) => {
-  const postId = req.params.id;
-  const currentUser = res.locals.userId;
+// router.get("/delete/:id", async (req, res) => {
+//   const postId = req.params.id;
+//   const currentUser = res.locals.userId;
 
-  const post = await PostsModel.findOne({ _id: postId }).lean();
+//   const post = await PostsModel.findOne({ _id: postId }).lean();
 
-  res.render("delete-post", { post, postId, authorId, currentUser });
-});
+//   res.render("delete-post", { post, postId, authorId, currentUser });
+// });
 
 router.post("/delete/:id", async (req, res) => {
+
   const postId = req.params.id;
   const userId = res.locals.userId;
+  const post = await PostsModel.findById(postId);
 
-  const post = await PostsModel.findOneAndDelete({ _id: postId });
-
-  await post.save();
+  await PostsModel.findByIdAndDelete(req.params.id);
 
   res.redirect("/user/" + userId);
 });

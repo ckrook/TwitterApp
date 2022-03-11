@@ -1,36 +1,26 @@
-<div class="flex p-10 gap-10 border-b">
-  {{!Edit a post }}
-  <div class="avatar">
-    <a href="/">
-      <img
-        id="avatar"
-        class="rounded-full w-20"
-        src="{{profile.profilePicture}}"
-        alt=""
-      />
-    </a>
-  </div>
+{{!Edit a post }}
   <div class="w-full">
-    <form class="mb-0" action="/post/single/edit/{{postId}}" method="POST">
       <textarea
         class="w-full mb-5 resize-none border-b-2 border-gray-200"
-        name="content"
-        id=""
+        name="content" 
         cols="30"
         rows="4"
         placeholder="Update your post"
-      ></textarea>
+      >{{post.content}}</textarea>
       <div class="flex justify-end">
         <div class="text-sm text-red-500 w-full">
           {{error}}
-        </div>
+      <form class="mb-0" action="/post/single/edit/{{post.postId}}" method="POST">
         <input
-          value="Update"
+          value="Save"
           type="submit"
-          class="w-32 py-2 px-4 bg-blue-400 hover:bg-blue-400 focus:ring-blue-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-full"
+          class="w-32 py-2 px-4 my-2 bg-blue-400 hover:bg-blue-500 focus:ring-blue-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-full cursor-pointer"
         />
-
-      </div>
+    </div>
+  </div>
+    </form>
+    <form action="/post/single/delete/{{postId}}" method="post" class="mb-0">
+      <input type="submit" class="cursor-pointer text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" value="Delete post">
     </form>
   </div>
 </div>

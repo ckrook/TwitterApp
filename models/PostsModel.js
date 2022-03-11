@@ -11,6 +11,7 @@ const postsSchema = new mongoose.Schema({
   retweet_count: { type: Number, default: 0 },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comments" }],
   comments_count: { type: Number, default: 0 },
+  editable: { type: Boolean, default: false },
 });
 
 const PostsModel = mongoose.model("Posts", postsSchema);

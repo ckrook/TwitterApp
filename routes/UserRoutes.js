@@ -27,6 +27,7 @@ router.get("/:id", followthem, async (req, res) => {
   if (id === res.locals.userId) {
     edit = true;
   }
+
   res.render("user-profile", { followthem, posts, profile, edit });
 });
 
@@ -44,6 +45,10 @@ router.get("/edit/:id", followthem, async (req, res) => {
   if (res.locals.userId === id) {
     const user = await UsersModel.findOne({ _id: id }).lean();
     res.render("profile-edit", { user, followthem });
+  }
+
+  if (req.params.id != res.locals.userId) {
+    res.render("not-found");
   }
 });
 
@@ -104,6 +109,10 @@ router.post("/edit/:id", followthem, async (req, res) => {
 router.post("/delete/:id", async (req, res) => {
   await UsersModel.findByIdAndDelete(req.params.id);
 
+  if (req.params.id != res.locals.userId) {
+    res.render("not-found");
+  }
+  
   res.cookie("token", "", { maxAge: 0 });
 
   res.redirect("/");
