@@ -40,14 +40,10 @@ router.get("/:id", followthem, async (req, res) => {
   if (id === res.locals.userId) {
     edit = true;
   }
-<<<<<<< HEAD
-
-=======
   console.log(profile.created);
   let date = profile.created;
   profile.created = mydate(profile.created);
   // profile.created = mydate(date);
->>>>>>> f58fde35583fbc39b7653bbcdbc8b514f4385e6e
   res.render("user-profile", { followthem, posts, profile, edit });
 });
 
