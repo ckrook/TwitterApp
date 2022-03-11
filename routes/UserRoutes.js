@@ -1,37 +1,17 @@
 const express = require("express");
-const UsersModel = require("../models/UsersModel.js");
 const router = express.Router();
 
-const mongoose = require("mongoose");
-const { timeAgo, getUniqueFilename } = require("./../utils");
-//LOG IN
-router.get("/", (req, res) => {
-  res.render("signup");
-});
-
-router.post("/log-in", (req, res) => {
-  res.redirect("start");
-});
-
-//LOG OUT
-router.post("/log-out", (req, res) => {
-  res.redirect("home");
-});
-
-//SIGN UP
-router.get("/sign-up", (req, res) => {
-  res.render("signup");
-});
-
-router.post("/sign-up", (req, res) => {
-  res.render("signup");
-});
-
-router.get("/sign-up-extra", (req, res) => {
-  res.render("signup-step-2");
-});
-const { forceAuthorize, followthem } = require("./../middleware.js");
+const UsersModel = require("../models/UsersModel.js");
 const PostsModel = require("../models/PostsModel.js");
+
+const { timeAgo, getUniqueFilename } = require("./../utils");
+const { forceAuthorize, followthem } = require("./../middleware.js");
+
+router.get("/", (req, res) => {
+  const userId = res.locals.userId;
+
+  res.redirect("/user/" + userId);
+});
 
 //USER PROFILE
 router.get("/:id", followthem, async (req, res) => {
