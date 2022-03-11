@@ -1,11 +1,24 @@
 const express = require("express");
 const router = express.Router();
 
+const mongoose = require("mongoose");
+const { timeAgo, getUniqueFilename, mydate } = require("./../utils");
+//LOG IN
+router.get("/", (req, res) => {
+  res.render("signup");
+});
+
+router.post("/log-in", (req, res) => {
+  res.redirect("start");
+});
+
+//LOG OUT
+router.post("/log-out", (req, res) => {
+  res.redirect("home");
+});
 const UsersModel = require("../models/UsersModel.js");
 const PostsModel = require("../models/PostsModel.js");
-
-const { timeAgo, getUniqueFilename } = require("./../utils");
-const { forceAuthorize, followthem } = require("./../middleware.js");
+const { followthem } = require("./../middleware.js");
 
 router.get("/", (req, res) => {
   const userId = res.locals.userId;
@@ -27,7 +40,14 @@ router.get("/:id", followthem, async (req, res) => {
   if (id === res.locals.userId) {
     edit = true;
   }
+<<<<<<< HEAD
 
+=======
+  console.log(profile.created);
+  let date = profile.created;
+  profile.created = mydate(profile.created);
+  // profile.created = mydate(date);
+>>>>>>> f58fde35583fbc39b7653bbcdbc8b514f4385e6e
   res.render("user-profile", { followthem, posts, profile, edit });
 });
 
@@ -58,6 +78,7 @@ router.post("/edit/:id", followthem, async (req, res) => {
   if (id === res.locals.userId) {
     edit = true;
   }
+  const user = await UsersModel.findOne({ _id: id }).lean();
   let followthem = req.followthem;
   let coverimage = "";
   let coverimagefilename = "";
@@ -75,7 +96,6 @@ router.post("/edit/:id", followthem, async (req, res) => {
     await image.mv(uploadPath);
     const dbUser = await UsersModel.findOne({ _id: id });
     dbUser.profilePicture = "/uploads/" + filename;
-    const profile = await UsersModel.findOne({ _id: id }).lean();
     await dbUser.save();
   }
   if (req.files && req.files.coverimage) {
@@ -92,6 +112,25 @@ router.post("/edit/:id", followthem, async (req, res) => {
   }
 
   const { displayname, username, email, bio, city, website } = req.body;
+  if (!displayname)
+    return res.render("profile-edit", {
+      error: "displayname cannot be empty",
+      user,
+      followthem,
+    });
+  if (!username)
+    return res.render("profile-edit", {
+      error: "Username cannot be empty",
+      user,
+      followthem,
+    });
+  if (!email)
+    return res.render("profile-edit", {
+      error: "Email cannot be empty",
+      user,
+      followthem,
+    });
+
   if (res.locals.userId === id) {
     const dbUser = await UsersModel.findOne({ _id: id });
     dbUser.displayname = displayname;
@@ -101,8 +140,7 @@ router.post("/edit/:id", followthem, async (req, res) => {
     dbUser.city = city;
     dbUser.website = website;
     await dbUser.save();
-    const profile = await UsersModel.findOne({ _id: id }).lean();
-    res.render("user-profile", { profile, followthem, edit });
+    res.redirect("/user/" + id);
   }
 });
 

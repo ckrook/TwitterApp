@@ -220,10 +220,19 @@ app.post("/sign-up", async (req, res, next) => {
   const { username, password, confirmpassword, email } = req.body;
 
   UsersModel.findOne({ username }, async (err, user) => {
-    if (user) return res.status(400).render("signup");
-    if (password !== confirmpassword) return res.status(400).render("signup");
+    if (user)
+      return res
+        .status(400)
+        .render("signup", { error: "Username already exists" });
+    if (password !== confirmpassword)
+      return res
+        .status(400)
+        .render("signup", { error: "Password do not match" });
     UsersModel.findOne({ email }, async (err, user) => {
-      if (email === username.email) return res.status(400).render("signup");
+      if (email === username.email)
+        return res
+          .status(400)
+          .render("signup", { error: "Email already exist in our system" });
     });
 
     const newUser = new UsersModel({
