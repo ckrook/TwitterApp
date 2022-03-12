@@ -9,8 +9,8 @@ const comparePassword = (password, hash) => {
   const correct = bcrypt.compareSync(password, hash);
   return correct;
 };
+
 function timeAgo(input) {
-  //https://stackoverflow.com/a/69122877/1977850
   const date = input instanceof Date ? input : new Date(input);
   const formatter = new Intl.RelativeTimeFormat("en");
   const ranges = {
@@ -49,8 +49,6 @@ function mydate(d) {
   d = new Date(d);
   const y = d.getFullYear();
   const m = mL[d.getMonth()];
-  console.log(y);
-  console.log(m);
   return "Joined " + m + " " + y;
 }
 

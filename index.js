@@ -40,13 +40,10 @@ app.use(express.static("public"));
 app.use(cookieParser());
 app.use(fileupload());
 
-//////////////////
-// MIDDLEWARES //
-////////////////
 app.use((req, res, next) => {
   const { token } = req.cookies;
   if (token && jwt.verify(token, process.env.JWTSECRET)) {
-    // Logged in
+
     const tokenData = jwt.decode(token, process.env.JWTSECRET);
     res.locals.loginInfo = tokenData.displayName + " " + tokenData.id;
     res.locals.loggedIn = true;
@@ -59,18 +56,14 @@ app.use((req, res, next) => {
     res.locals.following_count = tokenData.following_count;
     res.locals.followers_count = tokenData.followers_count;
     res.locals.posts_count = tokenData.posts_count;
+
   } else {
-    // Not Logged in
     res.locals.loggedin = false;
   }
   next();
 });
 
 const { forceAuthorize, followthem, sortPosts } = require("./middleware");
-
-//////////////////////
-// MIDDLEWARES ENDS//
-////////////////////
 
 app.get("/", sortPosts, followthem, async (req, res) => {
   let posts = req.sortPosts;
@@ -81,22 +74,17 @@ app.get("/", sortPosts, followthem, async (req, res) => {
   res.render("home", { posts, followthem, profile });
 });
 
-// ROUTES
-
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
 app.use("/comment", commentRoutes);
 app.use("/seed-data", seedDataRoutes);
 
-// END OF ROUTES
-
-// Login //
 app.post("/login", async (req, res) => {
   const error = "Användarnamn eller lösenord är felaktigt";
   const { username, password } = req.body;
   UsersModel.findOne({ username }, (err, user) => {
     if (user && utils.comparePassword(password, user.hashedPassword)) {
-      // Login successful
+
       const bio = user.bio;
       const city = user.city;
       const following_count = user.follows.length;
@@ -130,10 +118,6 @@ app.get("/", (req, res) => {
   res.render("login-module");
 });
 
-///////////////////
-// Google Login //
-/////////////////
-
 app.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
@@ -144,8 +128,9 @@ app.get(
   passport.authenticate("google", { failureRedirect: "/failure" }),
 
   async (req, res) => {
-    // Login with google successful
+
     const googleId = req.user.id;
+
     UsersModel.findOne({ googleId }, async (err, user) => {
       if (user) {
         const bio = user.bio;
@@ -210,9 +195,6 @@ app.get(
   }
 );
 
-// Google login end
-
-//Sign up
 app.get("/sign-up", (req, res) => {
   res.render("signup");
 });
@@ -244,6 +226,7 @@ app.post("/sign-up", async (req, res, next) => {
       role: "User",
     });
     await newUser.save();
+
     UsersModel.findOne({ username }, (err, user) => {
       if (user && utils.comparePassword(password, user.hashedPassword)) {
         // Login successful
@@ -275,7 +258,6 @@ app.post("/sign-up", async (req, res, next) => {
   });
 });
 
-//Sign up step 2
 app.post("/sign-up-extra", async (req, res) => {
   const id = res.locals.userId;
   const { dateOfBirth, city, phonenumber, website, bio } = req.body;

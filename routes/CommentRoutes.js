@@ -28,7 +28,6 @@ router.post("/new/:id", async (req, res) => {
 
   await newComment.save();
 
-  // Find main post
   let mainPost = await PostsModel.findOne({ _id: postId });
   mainPost.comments.push(newComment._id);
   mainPost.comments_count = mainPost.comments.length;
@@ -57,12 +56,9 @@ router.post("/edit/:id", async (req, res) => {
   if (!comment) {
     res.render("not-found");
   }
-  
   await comment.save();
-
-  console.log(comment);
-
   res.redirect("/post/single/" + comment.post_id);
+
 });
 
 router.post("/delete/:id", async (req, res) => {
