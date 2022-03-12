@@ -149,14 +149,12 @@ router.post("/edit/:id", async (req, res) => {
 // });
 
 router.post("/delete/:id", async (req, res) => {
-
   const postId = req.params.id;
-  const userId = res.locals.userId;
-  const post = await PostsModel.findById(postId);
-
+  // const userId = res.locals.userId;
+  // const post = await PostsModel.findById(postId);
   await PostsModel.findByIdAndDelete(req.params.id);
 
-  res.redirect("/user/" + userId);
+  res.redirect("/");
 });
 
 module.exports = router;
