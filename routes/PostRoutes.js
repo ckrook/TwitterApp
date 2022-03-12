@@ -81,7 +81,7 @@ router.get("/edit/:id", async (req, res) => {
     
   } else if (currentUser == authorId) {
     post.editable = true;
-    res.redirect("/post/single/edit/" + postId);
+    res.redirect("/post/single/" + postId);
   }
 
   res.render("edit-post-home", {
@@ -130,13 +130,13 @@ router.post("/edit/:id", async (req, res) => {
   const post = await PostsModel.findById(req.params.id);
   post.content = req.body.content;
 
-  if (!post.content) {
-    res.send("Can't leave this empty");
-  }
+  // if (!post.content) {
+  //   res.send("Can't leave this empty");
+  // }
   
   await post.save();
 
-  res.redirect("post/single/" + postId);
+  res.redirect("/post/single/" + postId);
 });
 
 // router.get("/delete/:id", async (req, res) => {
