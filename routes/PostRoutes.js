@@ -37,25 +37,23 @@ router.get("/single/:id", followthem, sortPosts, async (req, res) => {
   const followthem = req.followthem;
   const userId = res.locals.userId;
   const id = req.params.id;
-  const postId = req.params.id;
-  const currentUser = await UsersModel.findOne({ _id: userId }).populate("posts").lean();
-  const posts = await PostsModel.find({ author_id: id }).lean();
+  // const currentUser = await UsersModel.findOne({ _id: userId }).populate("posts");
+  // const posts = await PostsModel.find({ author_id: id }).lean();
   const post = await PostsModel.findById(id).populate("comments").lean();
   const authorId = post.author_id;
 
-  for (let post of posts) {
-    post.created = timeAgo(post.created);
-  }
-  if (currentUser === authorId) {
-    editable = true;
+  // for (let post of posts) {
+  //   post.created = timeAgo(post.created);
+  // }
+  if (authorId.toString() === userId.toString()) {
+    post.editable = true;
   }
 
+  // FOR COMMENTS
   const postComments = post.comments;
-
   for (const comment of postComments) {
     comment.created = timeAgo(comment.created);
   }
-
   for (let i = 0; i < postComments.length; i++) {
     if (postComments[i].author_id.toString() === userId.toString()) {
       postComments[i].editable = true;
@@ -63,7 +61,8 @@ router.get("/single/:id", followthem, sortPosts, async (req, res) => {
   }
   postComments.reverse(); 
 
-  res.render("post-single-home", { post, followthem, postId });
+
+  res.render("post-single-home", { post, followthem });
 });
 
 router.get("/edit/:id", async (req, res) => {
