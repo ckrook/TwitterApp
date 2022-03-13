@@ -11,13 +11,14 @@ router.get("/", (req, res) => {
   res.render("start");
 });
 
-
 router.get("/single/edit/:id", async (req, res) => {
   const followthem = req.followthem;
   const userId = res.locals.userId;
   const id = req.params.id;
   const postId = req.params.id;
-  const currentUser = await UsersModel.findOne({ _id: userId }).populate("posts").lean();
+  const currentUser = await UsersModel.findOne({ _id: userId })
+    .populate("posts")
+    .lean();
   const post = await PostsModel.findById(id).populate("comments").lean();
   const authorId = post.authorId;
 
@@ -28,10 +29,9 @@ router.get("/single/edit/:id", async (req, res) => {
     postId,
     currentUser,
     post,
-    authorId
+    authorId,
   });
 });
-
 
 router.get("/single/:id", followthem, sortPosts, async (req, res) => {
   const followthem = req.followthem;
@@ -59,8 +59,7 @@ router.get("/single/:id", followthem, sortPosts, async (req, res) => {
       postComments[i].editable = true;
     }
   }
-  postComments.reverse(); 
-
+  postComments.reverse();
 
   res.render("post-single-home", { post, followthem });
 });
@@ -78,7 +77,6 @@ router.get("/edit/:id", async (req, res) => {
 
   if (!currentUser == authorId) {
     res.render("not-found");
-    
   } else if (currentUser == authorId) {
     post.editable = true;
     res.redirect("/post/single/" + postId);
@@ -93,7 +91,6 @@ router.get("/edit/:id", async (req, res) => {
     followthem,
   });
 });
-
 
 router.post("/new", async (req, res) => {
   const userId = res.locals.userId;
@@ -125,7 +122,6 @@ router.post("/new", async (req, res) => {
 
 //POST för edit
 router.post("/edit/:id", async (req, res) => {
-  
   const postId = req.params.id;
   const post = await PostsModel.findById(req.params.id);
   post.content = req.body.content;
@@ -133,7 +129,7 @@ router.post("/edit/:id", async (req, res) => {
   // if (!post.content) {
   //   res.send("Can't leave this empty");
   // }
-  
+
   await post.save();
 
   res.redirect("/post/single/" + postId);

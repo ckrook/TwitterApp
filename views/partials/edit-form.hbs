@@ -1,13 +1,11 @@
 {{!Edit a post }}
 <div class="w-full">
-  <div class="flex justify-end">
-    <div class="text-sm text-red-500 w-full">
-        {{!-- {{error}} --}}
-    </div>
-    <form class="mb-0" action="/post/edit/{{post._id}}" method="POST">
+  <div class="flex">
+
+    <form class="mb-0 w-full" action="/post/edit/{{post._id}}" method="POST">
       <textarea
         class="w-full mb-5 resize-none border-b-2 border-gray-200"
-        name="content" 
+        name="content"
         cols="30"
         rows="4"
         placeholder="Update your post"
@@ -20,7 +18,11 @@
     </form>
   </div>
   <form action="/post/delete/{{post._id}}" method="post" class="mb-0">
-    <input type="submit" class="cursor-pointer text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" value="Delete post">
+    <input
+      type="submit"
+      class="cursor-pointer text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+      value="Delete post"
+    />
   </form>
 </div>
 {{!Edit a post ends }}
