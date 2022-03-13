@@ -1,6 +1,7 @@
 const UsersModel = require("./models/UsersModel");
 const PostsModel = require("./models/PostsModel.js");
 const utils = require("./utils.js");
+const { validate } = require("./models/PostsModel.js");
 
 const forceAuthorize = (req, res, next) => {
   const { token } = req.cookies;

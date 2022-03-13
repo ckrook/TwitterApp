@@ -3,7 +3,11 @@ const router = express.Router();
 
 const mongoose = require("mongoose");
 const { timeAgo, getUniqueFilename, mydate } = require("./../utils");
-//LOG IN
+
+const UsersModel = require("../models/UsersModel.js");
+const PostsModel = require("../models/PostsModel.js");
+const { followthem } = require("./../middleware.js");
+
 router.get("/", (req, res) => {
   res.render("signup");
 });
@@ -12,13 +16,9 @@ router.post("/log-in", (req, res) => {
   res.redirect("start");
 });
 
-//LOG OUT
 router.post("/log-out", (req, res) => {
   res.redirect("home");
 });
-const UsersModel = require("../models/UsersModel.js");
-const PostsModel = require("../models/PostsModel.js");
-const { followthem } = require("./../middleware.js");
 
 router.get("/", (req, res) => {
   const userId = res.locals.userId;
@@ -26,7 +26,6 @@ router.get("/", (req, res) => {
   res.redirect("/user/" + userId);
 });
 
-//USER PROFILE
 router.get("/:id", followthem, async (req, res) => {
   let edit = false;
   const id = req.params.id;
@@ -40,10 +39,9 @@ router.get("/:id", followthem, async (req, res) => {
   if (id === res.locals.userId) {
     edit = true;
   }
-  console.log(profile.created);
   let date = profile.created;
   profile.created = mydate(profile.created);
-  // profile.created = mydate(date);
+
   res.render("user-profile", { followthem, posts, profile, edit });
 });
 
@@ -58,6 +56,7 @@ router.post("/follow", async (req, res) => {
 router.get("/edit/:id", followthem, async (req, res) => {
   const id = req.params.id;
   let followthem = req.followthem;
+
   if (res.locals.userId === id) {
     const user = await UsersModel.findOne({ _id: id }).lean();
     res.render("profile-edit", { user, followthem });
@@ -71,9 +70,11 @@ router.get("/edit/:id", followthem, async (req, res) => {
 router.post("/edit/:id", followthem, async (req, res) => {
   let edit = false;
   const id = req.params.id;
+
   if (id === res.locals.userId) {
     edit = true;
   }
+
   const user = await UsersModel.findOne({ _id: id }).lean();
   let followthem = req.followthem;
   let coverimage = "";
@@ -82,6 +83,7 @@ router.post("/edit/:id", followthem, async (req, res) => {
   let image = "";
   let filename = "";
   let uploadPath = "";
+
   if (req.files && req.files.image) {
     image = req.files.image;
     filename = getUniqueFilename(image.name);
@@ -94,6 +96,7 @@ router.post("/edit/:id", followthem, async (req, res) => {
     dbUser.profilePicture = "/uploads/" + filename;
     await dbUser.save();
   }
+  
   if (req.files && req.files.coverimage) {
     coverimage = req.files.coverimage;
     coverimagefilename = getUniqueFilename(coverimage.name);
@@ -108,18 +111,21 @@ router.post("/edit/:id", followthem, async (req, res) => {
   }
 
   const { displayname, username, email, bio, city, website } = req.body;
+
   if (!displayname)
     return res.render("profile-edit", {
       error: "displayname cannot be empty",
       user,
       followthem,
     });
+
   if (!username)
     return res.render("profile-edit", {
       error: "Username cannot be empty",
       user,
       followthem,
     });
+
   if (!email)
     return res.render("profile-edit", {
       error: "Email cannot be empty",

@@ -1,5 +1,4 @@
-{{!Post}}
-  <div
+<div
     class="flex flex-col w-[600px] px-10 pt-10 pb-5 gap-10 border-b border-gray-200"
   >
     <div class="flex gap-10">
@@ -127,8 +126,6 @@
         <a href="" class="hidden sm:block"></a>
       </div>
     </div>
-
-{{!--  Edit & delete --}}
     <div>
       <div class="flex items-center justify-center space-x-2">
       {{#if post.editable}}
@@ -159,10 +156,7 @@
       </div>
     </div>
   </div>
-{{!Post ends }}
 
-
-{{!Submit a comment }}
 <div class="flex p-10 gap-10 border-b border-gray-200">
   <div class="avatar">
     <img
@@ -197,9 +191,7 @@
     </form>
   </div>
 </div>
-{{!Submit a comment ends}}
 
-{{!Post comment feed}}
 {{#each post.comments}}
   <div
     class="flex flex-col w-full p-10 gap-10 border-b border-gray-200"
@@ -307,4 +299,3 @@
     </div>
   </div>
 {{/each}}
-{{!Post comment feed ends}}

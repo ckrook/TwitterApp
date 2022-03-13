@@ -15,6 +15,7 @@ router.get("/", async (req, res) => {
     dateOfBirth: 19900101,
     bio: "Frontend developer based in Stockholm",
   });
+  
   const adminUserAlexia = new UsersModel({
     username: "alexia",
     hashedPassword: utils.hashedPassword(password),
@@ -23,6 +24,7 @@ router.get("/", async (req, res) => {
     dateOfBirth: 19900101,
     bio: "Frontend developer & Designer based in Stockholm",
   });
+
   const adminUserSimon = new UsersModel({
     username: "simon",
     hashedPassword: utils.hashedPassword(password),
@@ -37,47 +39,8 @@ router.get("/", async (req, res) => {
   await adminUserSimon.save();
 
   res.send(
-    "Boom admins are created! Gå bara hit en gång dock annars blir de nog knas. Kolla i mongodb compass så användarna finns där"
+    "Admins created!"
   );
 });
 
 module.exports = router;
-
-// const usersSchema = new mongoose.Schema({
-//   username: { type: String, required: true },
-//   hashedPassword: { type: String, required: true },
-//   email: { type: String, required: true },
-//   city: { type: String },
-//   description: { type: String, default: "" },
-//   dateOfBirth: { type: Number },
-//   created: { type: Number, default: Date.now },
-//   role: { type: String, default: "User" },
-//   bio: String,
-//   profilePicture: String,
-//   posts: [
-//     {
-//       type: String,
-//       default: [],
-//     },
-//   ],
-//   follows: [
-//     {
-//       type: String,
-//       default: [],
-//     },
-//   ],
-//   follows_count: { type: Number },
-//   followers: [
-//     {
-//       type: String,
-//       default: [],
-//     },
-//   ],
-//   follower_count: { type: Number },
-//   likedPosts: [
-//     {
-//       type: String,
-//       default: [],
-//     },
-//   ],
-// });
