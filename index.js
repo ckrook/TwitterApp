@@ -43,7 +43,6 @@ app.use(fileupload());
 app.use((req, res, next) => {
   const { token } = req.cookies;
   if (token && jwt.verify(token, process.env.JWTSECRET)) {
-
     const tokenData = jwt.decode(token, process.env.JWTSECRET);
     res.locals.loginInfo = tokenData.displayName + " " + tokenData.id;
     res.locals.loggedIn = true;
@@ -56,7 +55,6 @@ app.use((req, res, next) => {
     res.locals.following_count = tokenData.following_count;
     res.locals.followers_count = tokenData.followers_count;
     res.locals.posts_count = tokenData.posts_count;
-
   } else {
     res.locals.loggedin = false;
   }
@@ -84,7 +82,6 @@ app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   UsersModel.findOne({ username }, (err, user) => {
     if (user && utils.comparePassword(password, user.hashedPassword)) {
-
       const bio = user.bio;
       const city = user.city;
       const following_count = user.follows.length;
@@ -128,7 +125,6 @@ app.get(
   passport.authenticate("google", { failureRedirect: "/failure" }),
 
   async (req, res) => {
-
     const googleId = req.user.id;
 
     UsersModel.findOne({ googleId }, async (err, user) => {
