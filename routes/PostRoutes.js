@@ -44,6 +44,7 @@ router.get("/single/:id", followthem, sortPosts, async (req, res) => {
   const userId = res.locals.userId;
   const id = req.params.id;
   const post = await PostsModel.findById(id).populate("comments").lean();
+  if (!post) return res.status(404).render("not-found");
   const authorId = post.author_id;
 
   if (authorId.toString() === userId.toString()) {

@@ -31,6 +31,7 @@ router.get("/:id", followthem, async (req, res) => {
   const id = req.params.id;
   let followthem = req.followthem;
   const profile = await UsersModel.findOne({ _id: id }).lean();
+  if (!profile) return res.status(404).render("not-found");
   const posts = await PostsModel.find({ author_id: id }).lean();
 
   for (let post of posts) {
@@ -39,7 +40,6 @@ router.get("/:id", followthem, async (req, res) => {
   if (id === res.locals.userId) {
     edit = true;
   }
-  let date = profile.created;
   profile.created = mydate(profile.created);
 
   res.render("user-profile", { followthem, posts, profile, edit });
@@ -96,7 +96,7 @@ router.post("/edit/:id", followthem, async (req, res) => {
     dbUser.profilePicture = "/uploads/" + filename;
     await dbUser.save();
   }
-  
+
   if (req.files && req.files.coverimage) {
     coverimage = req.files.coverimage;
     coverimagefilename = getUniqueFilename(coverimage.name);
@@ -152,7 +152,7 @@ router.post("/delete/:id", async (req, res) => {
   if (req.params.id != res.locals.userId) {
     res.render("not-found");
   }
-  
+
   res.cookie("token", "", { maxAge: 0 });
 
   res.redirect("/");
