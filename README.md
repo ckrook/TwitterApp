@@ -5,7 +5,7 @@ This project is currently under development and will soon be deployed on a live 
 ## Summary
 This is part of a school group project where our objectives where to create a Twitter-like platform where users could perform all CRUD operations on posts and comments. We tried to emulate Twitter as much as we could with design choices and content layout. Although there where some key limitations such as search-feature, following, messages for example.
 
-### Goals
+## Goals
 The goal of the task is to evaluate the knowledge in the following areas:
 
 <ul>
@@ -51,3 +51,10 @@ Come up with an idea for a platform or web application with your group. The appl
   <li>Mongoose</li>
   <li>Passport</li>
 </ul>
+
+## Installation
+
+<p>Get started with this project by running the following commands in terminal</p><br>
+<code>git clone https://github.com/ckrook/TwitterApp.git</code><br>
+<code>run npm i</code><br>
+<code>nodemon</code>
