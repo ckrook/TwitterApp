@@ -52,6 +52,9 @@ Come up with an idea for a platform or web application with your group. The appl
   <li>Passport</li>
 </ul>
 
+## Preview
+![](twitter.gif)
+
 ## Installation
 
 <p>Get started with this project by running the following commands in terminal</p><br>
