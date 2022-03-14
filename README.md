@@ -2,6 +2,9 @@
 
 This project is currently under development and will soon be deployed on a live server.
 
+## Preview
+![](twitter.gif)
+
 ## Summary
 This is part of a school group project where our objectives where to create a Twitter-like platform where users could perform all CRUD operations on posts and comments. We tried to emulate Twitter as much as we could with design choices and content layout. Although there where some key limitations such as search-feature, following, messages for example.
 
@@ -51,9 +54,6 @@ Come up with an idea for a platform or web application with your group. The appl
   <li>Mongoose</li>
   <li>Passport</li>
 </ul>
-
-## Preview
-![](twitter.gif)
 
 ## Installation
 
