@@ -1,3 +1,5 @@
+// GRUPP 4 / Charles Krook, Simon Sandahl, Alexia Hellsten
+
 require("dotenv").config();
 require("./mongoose.js");
 require("./passport.js");
